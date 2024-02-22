@@ -1,0 +1,49 @@
+version: '3'
+services:
+
+  couchbase:
+    image: btburnett3/couchbase-quickinit:enterprise-7.2.3
+    hostname: couchbase
+    container_name: couchbase
+    environment:
+      - CB_SERVICES=kv,n1ql,index
+      - CB_CLUSTER_NAME=demo
+      - CB_INDEXSTORAGE=plasma
+    volumes:
+      - "./db/couchbase:/opt/couchbase/var/lib/couchbase"
+      - "./db/config:/startup"
+    # In the command section, $ are replaced with $$ to avoid the error 'Invalid interpolation format for "command" option'
+    command:
+      - bash
+      - -c
+      - |
+        echo 'initialization...'
+        sleep 10
+        chmod +x /startup/load.sh
+        cd /startup/
+        ./load.sh
+    ports:
+      - "8091-8096:8091-8096"
+      - "18091-18096:18091-18096"
+      - "11207:11207"
+      - "11210-11211:11210-11211"
+    networks:
+      - workshop
+
+  sync-gateway:
+    build: ./sgw
+    ports:
+      - "4984-4986:4984-4986"
+    hostname: sync-gateway
+    container_name: sync-gateway
+    depends_on:
+      - couchbase
+    working_dir: /docker-syncgateway
+    stdin_open: true
+    tty: true
+    networks:
+      - workshop
+
+networks:
+  workshop:
+    driver: bridge

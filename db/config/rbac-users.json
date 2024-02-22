@@ -1,0 +1,10 @@
+[
+  {
+    "rbacName": "Raw Sink Connector User",
+    "rbacUsername": "sync_gateway",
+    "rbacPassword": "password",
+    "roles": [
+      "mobile_sync_gateway[demo]"
+    ]
+  }
+]

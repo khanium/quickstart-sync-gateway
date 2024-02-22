@@ -1,0 +1,11 @@
+{
+  "scopes": {
+    "custom": {
+      "collections": [
+        "typeA",
+        "typeB",
+        "typeC"
+      ]
+    }
+  }
+}

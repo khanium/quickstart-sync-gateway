@@ -1,0 +1,59 @@
+{
+    "api": {
+        "admin_interface": ":4985",
+        "public_interface": ":4984",
+        "admin_interface_authentication": false
+    },
+    "bootstrap": {
+        "server": "couchbases://couchbase",
+        "username": "sync_gateway",
+        "password": "password",
+        "server_tls_skip_verify": true,
+        "use_tls_server": true
+    },
+    "logging": {
+        "console": {
+            "log_level": "debug",
+            "log_keys": ["HTTP",
+            "REST",
+            "Events",
+            "CRUD",
+            "Auth",
+            "Access"],
+            "color_enabled": true,
+            "rotation": {
+               "max_size": 1,
+               "max_age": 180
+            }
+          },
+        "error": {
+            "enabled": true,
+            "rotation": {
+              "max_size": 1,
+              "max_age": 180
+            }
+          }, 
+        "warn": {
+            "enabled": true,
+            "rotation": {
+              "max_size": 20,
+              "max_age": 180
+            }
+          }, 
+        "info": {
+            "enabled": true,
+             "rotation": {
+              "max_size": 1,
+              "max_age": 180
+            }
+          },
+        "debug": {
+            "enabled": true,
+             "rotation": {
+              "max_size": 1,
+              "max_age": 180
+            }
+         } 
+    }
+}
+
