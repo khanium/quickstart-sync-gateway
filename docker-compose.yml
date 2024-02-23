@@ -1,6 +1,5 @@
-version: '3'
+version:  '3.9'
 services:
-
   couchbase:
     image: btburnett3/couchbase-quickinit:enterprise-7.2.3
     hostname: couchbase
@@ -13,6 +12,11 @@ services:
       - "./db/couchbase:/opt/couchbase/var/lib/couchbase"
       - "./db/config:/startup"
     # In the command section, $ are replaced with $$ to avoid the error 'Invalid interpolation format for "command" option'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://Administrator:password@localhost:8091/pools/default/buckets/demo/scopes"]
+      interval: 10s
+      timeout: 3s
+      retries: 60
     command:
       - bash
       - -c
@@ -20,8 +24,8 @@ services:
         echo 'initialization...'
         sleep 10
         chmod +x /startup/load.sh
-        cd /startup/
-        ./load.sh
+        cd /startup
+        /startup/load.sh
     ports:
       - "8091-8096:8091-8096"
       - "18091-18096:18091-18096"
@@ -37,7 +41,8 @@ services:
     hostname: sync-gateway
     container_name: sync-gateway
     depends_on:
-      - couchbase
+      couchbase:
+        condition: service_healthy
     working_dir: /docker-syncgateway
     stdin_open: true
     tty: true
