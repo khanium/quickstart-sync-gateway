@@ -41,7 +41,7 @@ Verify the Couchbase Server Admin Console with username: `Administrator` and pas
 ![Couchbase Console UI](/docs/assets/02_server.png)
 
 
-Check the Couchbase Server demo bucket and custom scope with the three collections: `typeA`, `typeB` & `typeC`.
+Check the Couchbase Server `demo` bucket and `custom` scope with the three collections: `typeA`, `typeB` & `typeC`.
 
 ![collections](/docs/assets/02_collections.png)
 

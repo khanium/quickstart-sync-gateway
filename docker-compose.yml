@@ -80,6 +80,7 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus/data:/prometheus
+      - ./prometheus/rules:/etc/prometheus/rules
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -99,6 +100,7 @@ services:
      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
      - GF_AUTH_ANONYMOUS_ENABLED=true
      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+     - GF_INSTALL_PLUGINS=grafana-simple-json-datasource
    ports:
      - '3000:3000'
    depends_on:

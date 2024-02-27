@@ -1,0 +1,24 @@
+{
+    "name": "db",
+    "bucket": "demo",
+    "scopes":
+    {
+        "custom":
+        {
+            "collections":
+            {
+                "typeA":
+                {
+                    "sync": "function(doc, oldDoc, meta) { if(doc.channels) { channel(doc.channels); }else{ throw({forbidden: \"document'\"+doc._id+\"'doesn't contain channels field to sync\"}); } }"
+                },
+                "typeB":
+                {
+                    "sync": "function(doc, oldDoc, meta) { if(doc.channels) { channel(doc.channels); }else{ throw({forbidden: \"document'\"+doc._id+\"'doesn't contain channels field to sync\"}); } }"
+                }
+            }
+        }
+    },
+    "revs_limit": 20,
+    "allow_conflicts": false,
+    "num_index_replicas": 0
+}

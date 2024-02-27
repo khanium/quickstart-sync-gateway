@@ -1,0 +1,3 @@
+[
+  {"name":"userdb1","password":"password","collection_access":{"custom":{"typeA":{"admin_channels":["blue"]},"typeB":{"admin_channels":["blue"]}}},"email":"userdb1@company.com"}
+]
