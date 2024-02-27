@@ -1,10 +1,18 @@
 [
   {
-    "rbacName": "Raw Sink Connector User",
+    "rbacName": "Sync Gateway User",
     "rbacUsername": "sync_gateway",
     "rbacPassword": "password",
     "roles": [
       "mobile_sync_gateway[demo]"
+    ]
+  },
+  {
+    "rbacName": "metrics user",
+    "rbacUsername": "metrics_user",
+    "rbacPassword": "password",
+    "roles": [
+      "external_stats_reader"
     ]
   }
 ]

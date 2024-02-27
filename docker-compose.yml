@@ -44,10 +44,72 @@ services:
       couchbase:
         condition: service_healthy
     working_dir: /docker-syncgateway
+    volumes:
+      - ./sgw/logs:/var/log/sync_gateway
     stdin_open: true
     tty: true
     networks:
       - workshop
+
+  node-exporter:
+   image: prom/node-exporter:latest
+   container_name: node-exporter
+   restart: unless-stopped
+   volumes:
+      # Remember to use read-only bind mounts.
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro,rslave
+   command:
+     - '--path.procfs=/host/proc'
+     - '--path.rootfs=/rootfs'
+     - '--path.sysfs=/host/sys'
+     - "--collector.filesystem.ignored-mount-points='^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'"
+   ports:
+     - "9100:9100" 
+   networks:
+     - workshop
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    depends_on:
+      couchbase:
+        condition: service_healthy
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090" 
+    networks:
+      - workshop
+  
+  grafana:
+   image: grafana/grafana-enterprise
+   container_name: grafana
+   restart: unless-stopped
+   environment:
+     - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+     - GF_AUTH_ANONYMOUS_ENABLED=true
+     - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+   ports:
+     - '3000:3000'
+   depends_on:
+     - prometheus
+   volumes:
+     - ./grafana/data:/var/lib/grafana
+     - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+     - ./grafana/dashboards:/var/lib/grafana/dashboards
+     - ./grafana/datasources:/etc/grafana/provisioning/datasources
+   networks:
+     - workshop
 
 networks:
   workshop:
