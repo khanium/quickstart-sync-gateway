@@ -22,7 +22,7 @@ services:
       - -c
       - |
         echo 'initialization...'
-        sleep 10
+        sleep 10;
         chmod +x /startup/load.sh
         cd /startup
         /startup/load.sh
@@ -45,11 +45,30 @@ services:
         condition: service_healthy
     working_dir: /docker-syncgateway
     volumes:
+      - ./sgw/config:/docker-syncgateway
       - ./sgw/logs:/var/log/sync_gateway
     stdin_open: true
     tty: true
     networks:
       - workshop
+
+  sync-gateway-init:
+    image: dwdraju/alpine-curl-jq
+    hostname: sync-gateway-init
+    container_name: sync-gateway-init
+    depends_on:
+      sync-gateway:
+        condition: service_started
+    working_dir: /root
+    volumes:
+      - ./sgw/config:/root/
+    command: 
+      - bash 
+      - -c 
+      - /root/init.sh
+    networks:
+      - workshop
+
 
   node-exporter:
    image: prom/node-exporter:latest

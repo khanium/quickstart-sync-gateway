@@ -13,7 +13,7 @@ fi
 json_array=$(cat "$json_file" | jq -c '.[]')
 
 username="-u sync_gateway:password"
-api_url="http://localhost:4985"
+api_url="http://sync-gateway:4985"
 database="db"
 
 # Loop through each JSON item and perform a curl POST request
@@ -23,7 +23,7 @@ while IFS= read -r json_item; do
    
     # Perform the curl POST request with the current JSON item as payload
     echo "Creating SGW user: ${name}... $api_url/$database/_user/"
-    curl -X POST -H "accept: */*" -H "Content-Type: application/json" -d "$json_item" "$api_url/$database/_user/"
+    curl -u sync_gateway:password -X POST -H "accept: */*" -H "Content-Type: application/json" -d "$json_item" "$api_url/$database/_user/"
     
     # Add a sleep if needed to avoid rate limiting or excessive requests
     sleep 1

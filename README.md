@@ -110,3 +110,8 @@ docker-compose down
 ```
 ./cleanup-data.sh
 ```
+
+
+# References
+
+* [https://developer.couchbase.com/sync-gateway-setup](https://developer.couchbase.com/sync-gateway-setup)
