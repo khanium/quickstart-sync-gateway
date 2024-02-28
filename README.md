@@ -121,3 +121,5 @@ docker-compose down
 # References
 
 * [https://developer.couchbase.com/sync-gateway-setup](https://developer.couchbase.com/sync-gateway-setup)
+* [https://github.com/brantburnett/couchbasefakeit](https://github.com/brantburnett/couchbasefakeit)
+
