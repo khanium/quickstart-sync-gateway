@@ -45,7 +45,7 @@ Check the Couchbase Server `demo` bucket and `custom` scope with the three colle
 
 ![collections](/docs/assets/02_collections.png)
 
-Check the Couchbase Server User `sync_gateway` with mobile sync gateway role on demo bucket. 
+Check the Couchbase Server User `sync_gateway` with mobile sync gateway role on demo bucket and `metrics_user` for prometheus metrics scrapping in Sync Gateway and Couchbase Server. 
 
 
 ![security](/docs/assets/02_security.png)
@@ -54,13 +54,14 @@ Check the Couchbase Server User `sync_gateway` with mobile sync gateway role on 
 Note: This Sync Gateway configuration does not include TLS connections. 
 
 
-3. Verify Sync Gateway Database & Users
+**Verify Sync Gateway Database & Users**
 
 From your host CMD/terminal you can check the `db` database and `userdb1` user creation: 
 
 ```
-curl -X GET "http://localhost:4985/db/" -H "accept: */*" -H "Content-Type: application/json" 
+curl http://localhost:4985/db/
 ```
+
 Note: This database configuration has defined `num_index_replicas: 0`. Please change this parameter to the default value 1 when your Couchbase Server cluster contains at least 2 indexes service nodes. 
 
 In this example, we have setup a `custom` scope and collections `typeA` and `typeB`. Note: collection `typeC` is not synced with this Sync Gateway database. 
@@ -75,14 +76,33 @@ Let´s verify the database users
 curl http://localhost:4985/db/_user/
 ```
 
-And if you want to see user `userdb1` details:
+And the user `userdb1` details info:
 
 ```
 curl http://localhost:4985/db/_user/userdb1
 ```
 
+**Verify your Monitoring System**
 
-4. Run your own Couchbase Mobile App
+
+* Node Exporter at [http://localhost:9100](http://localhost:9100)
+
+![node exporter](/docs/assets/03_node-exporter.png)
+
+* Prometheus at [http://localhost:9090](http://localhost:9090)
+
+![prometheus](/docs/assets/03_prometheus.png)
+
+* Grafana at [http://localhost:3000](http://localhost:3000)
+
+![grafana dashboards](/docs/assets/03_grafana-dashboards.png)
+
+Let´s load the sync gateway dashboard...
+
+![grafana sync gateway](/docs/assets/03_grafana-sgw.png)
+
+
+3. Run your own Couchbase Mobile App
 
 ```
 replication sgw url: ws://127.0.0.1:4984/db
@@ -117,6 +137,21 @@ docker-compose down
 ./cleanup-data.sh
 ```
 
+# Configure Couchbase Server
+
+-- TBD -- 
+
+## Buckets
+## Scope/Collections
+## Users
+
+
+# Configure Sync Gateway
+
+-- TBD --
+
+## Database
+## Users
 
 # References
 
