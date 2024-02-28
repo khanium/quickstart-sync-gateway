@@ -54,29 +54,23 @@ Check the Couchbase Server User `sync_gateway` with mobile sync gateway role on 
 Note: This Sync Gateway configuration does not include TLS connections. 
 
 
-3. Configure Sync Gateway Database
+3. Verify Sync Gateway Database & Users
 
-From your host CMD/terminal configure the first time the database using one Scope and define their collection's sync functions: 
+From your host CMD/terminal you can check the `db` database and `userdb1` user creation: 
 
 ```
-curl -X PUT "http://localhost:4985/db/" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"name\": \"db\", \"bucket\": \"demo\", \"scopes\": { \"custom\": { \"collections\": { \"typeA\": { \"sync\": \"function(doc, oldDoc, meta) { if(doc.channels) { channel(doc.channels); }else{ throw({forbidden: \\\"document'\\\"+doc._id+\\\"'doesn't contain channels field to sync\\\"}); } }\" }, \"typeB\": { \"sync\": \"function(doc, oldDoc, meta) { if(doc.channels) { channel(doc.channels); }else{ throw({forbidden: \\\"document'\\\"+doc._id+\\\"'doesn't contain channels field to sync\\\"}); } }\" } } } }, \"revs_limit\": 20, \"allow_conflicts\": false, \"num_index_replicas\": 0}"
+curl -X GET "http://localhost:4985/db/" -H "accept: */*" -H "Content-Type: application/json" 
 ```
 
 In this example, we have setup a `custom` scope and collections `typeA` and `typeB`. Note: collection `typeC` is not synced with this Sync Gateway database. 
 
 Note: This database configuration has defined `num_index_replicas: 0`. Please change this parameter to the default value 1 when your Couchbase Server cluster contains at least 2 indexes service nodes. 
 
-
-4. Configure Sync Gateway Users
-
-Let's configure now a Sync Gateway user `userdb1` with password `password` and access to the documents with channel `blue` in collections `typeA` or `typeB`. 
-
 ```
-curl -u sync_gateway:password -X POST "http://localhost:4985/db/_user/" -H "accept: */*" -H "Content-Type: application/json" -d "{\"name\":\"userdb1\",\"password\":\"password\",\"collection_access\":{\"custom\":{\"typeA\":{\"admin_channels\":[\"blue\"]},\"typeB\":{\"admin_channels\":[\"blue\"]}}},\"email\":\"userdb1@company.com\"}"
+curl -u sync_gateway:password -X GET "http://localhost:4985/db/_user/" -H "accept: */*" -H "Content-Type: application/json"
 ```
 
-
-5. Run your own Couchbase Mobile App
+4. Run your own Couchbase Mobile App
 
 ```
 replication sgw url: ws://127.0.0.1:4984/db
