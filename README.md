@@ -61,14 +61,26 @@ From your host CMD/terminal you can check the `db` database and `userdb1` user c
 ```
 curl -X GET "http://localhost:4985/db/" -H "accept: */*" -H "Content-Type: application/json" 
 ```
+Note: This database configuration has defined `num_index_replicas: 0`. Please change this parameter to the default value 1 when your Couchbase Server cluster contains at least 2 indexes service nodes. 
 
 In this example, we have setup a `custom` scope and collections `typeA` and `typeB`. Note: collection `typeC` is not synced with this Sync Gateway database. 
 
-Note: This database configuration has defined `num_index_replicas: 0`. Please change this parameter to the default value 1 when your Couchbase Server cluster contains at least 2 indexes service nodes. 
+```
+curl http://localhost:4985/db/_config
+```
+
+Let´s verify the database users 
 
 ```
-curl -u sync_gateway:password -X GET "http://localhost:4985/db/_user/" -H "accept: */*" -H "Content-Type: application/json"
+curl http://localhost:4985/db/_user/
 ```
+
+And if you want to see user `userdb1` details:
+
+```
+curl http://localhost:4985/db/_user/userdb1
+```
+
 
 4. Run your own Couchbase Mobile App
 
