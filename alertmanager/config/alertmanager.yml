@@ -1,0 +1,127 @@
+global:
+  resolve_timeout: 3m
+
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'   # make sure to copy the templates over
+
+route:
+  # The labels by which incoming alerts are grouped together. For example,
+  # multiple alerts coming in for cluster=A and alertname=LatencyHigh would
+  # be batched into a single group.
+  #
+  # To aggregate by all possible labels use '...' as the sole label name.
+  # This effectively disables aggregation entirely, passing through all
+  # alerts as-is. This is unlikely to be what you want, unless you have
+  # a very low alert volume or your upstream notification system performs
+  # its own grouping. Example: group_by: [...]
+  group_by: ['alertname', 'category', 'severity', 'cluster_name']
+
+  # When a new group of alerts is created by an incoming alert, wait at
+  # least 'group_wait' to send the initial notification. This way ensures that you
+  # get multiple alerts for the same group that start firing shortly after another
+  # are batched together on the first notification.
+  group_wait: 30s
+
+  # When the first notification was sent, wait 'group_interval' to send a batch of
+  # new alerts that started firing for that group.
+  group_interval: 5m
+
+  # If an alert has successfully been sent, wait 'repeat_interval' to resend them.
+  repeat_interval: 30m
+
+  # A default receiver
+  receiver: blackhole
+  # All the above attributes are inherited by all child routes and can overwritten on each.
+
+  # The child route trees.
+  routes:
+    # PagerDuty Alerts
+    - matchers:
+        - severity="critical"
+      receiver: pagerduty
+      continue: true
+    # Slack Alerts
+    - matchers:
+        - severity=~"critical|warning"
+      receiver: slack
+      continue: true
+    # Info Alerts
+    - matchers:
+        - severity="info"
+      receiver: blackhole
+
+receivers:
+  - name: blackhole    # a receiver with no configurations
+  - name: slack
+    slack_configs:
+      # slack webhook url
+      # UPDATE TO BE A VALID WEBHOOK OR REMOVE THIS PRIOR TO EXECUTING
+      - api_url: "https://hooks.slack.com/services/XXXXXXXXX/XXXXXXXXX/XXXXXXXXX"
+        channel: '#alerts'   # channel to post alerts to
+        send_resolved: true
+        username: '{{ template "__slack_alert_username" . }}'
+        title: '{{ template "__slack_alert_title" . }}'
+        title_link: '{{ template "__alert_alertmanager_link" . }}'
+        icon_emoji: '{{ template "__slack_alert_icon_emoji" . }}'
+        color: '{{ template "__slack_alert_color" . }}'
+        text: '{{ template "__slack_alert_text" . }}'
+        actions:
+          # Add Couchbase Admin UI Button
+          - type: button
+            text: "Console :couchbase:"    # add a custom :couchbase: emoji to your slack
+            # set the cluster admin ui url
+            url: '{{ template "__alert_couchbase_link" . }}'
+          # Add Runbook URL Button
+          - type: button
+            text: "Runbook :green_book:"
+            url: '{{ template "__alert_runbook_link" . }}'
+          # Add Prometheus Query Button
+          - type: button
+            text: "Query :mag:"
+            url: '{{ template "__alert_prometheus_link" . }}'
+          # Add Grafana Dashboard Button
+          - type: button
+            text: "Dashboard :grafana:"    # add a custom :grafana: emoji to your slack
+            url: '{{ template "__alert_grafana_link" . }}'
+          # Add Silence Button
+          - type: button
+            text: "AlertManager :prometheus:"
+            url: '{{ template "__alert_alertmanager_link" . }}'
+          # Add Silence Button
+          - type: button
+            text: "Silence :no_bell:"
+            url: '{{ template "__alert_silence_link" . }}'
+  - name: web.hook
+    # webhook_configs:
+    #   - url: http://127.0.0.1:5001/
+  - name: 'team-X-mails'
+    # email_configs:
+    #   - to: 'team-X+alerts@example.org'
+  - name: 'team-X-pager'
+    # email_configs:
+    #   - to: 'team-X+alerts-critical@example.org'
+    # pagerduty_configs:
+    #   - service_key: <team-X-key>
+  - name: 'team-Y-mails'
+    # email_configs:
+    #   - to: 'team-Y+alerts@example.org'
+  - name: 'team-Y-pager'
+    # pagerduty_configs:
+    #   - service_key: <team-Y-key>
+  - name: 'team-DB-pager'
+    # pagerduty_configs:
+    #   - service_key: <team-DB-key>
+
+# Inhibition rules allow to mute a set of alerts given that another alert is
+# firing.  Used to mute any warning-level notifications if the same alert is
+# already critical.
+inhibit_rules:
+  - source_matchers:
+      - severity="critical"
+    target_matchers:
+      - severity=~"warning|info"
+    equal:
+      - alertname
+      - category
+      - cluster_name
+

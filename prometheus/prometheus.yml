@@ -2,8 +2,11 @@ global:
   scrape_interval:     5s
   evaluation_interval: 5s
 
+  external_labels:
+     monitor: observability
+
 rule_files:
-  - '/etc/prometheus/rules/*'
+  - '/etc/prometheus/rules/*.yml'
 
 scrape_configs:
   - job_name: 'server_metrics'

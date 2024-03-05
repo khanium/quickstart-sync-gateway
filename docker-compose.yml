@@ -1,7 +1,7 @@
 version:  '3.9'
 services:
   couchbase:
-    image: btburnett3/couchbase-quickinit:enterprise-7.2.3
+    image: btburnett3/couchbase-quickinit:enterprise-7.1.6
     hostname: couchbase
     container_name: couchbase
     environment:
@@ -96,6 +96,8 @@ services:
     depends_on:
       couchbase:
         condition: service_healthy
+    labels: 
+      clusterName: demo716
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus/data:/prometheus
@@ -123,7 +125,9 @@ services:
    ports:
      - '3000:3000'
    depends_on:
-     - prometheus
+     - prometheus    
+   labels: 
+     clusterName: demoG716
    volumes:
      - ./grafana/data:/var/lib/grafana
      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
