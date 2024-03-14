@@ -1,3 +1,4 @@
+{"dashboard":
 {
    "__inputs": [ ],
    "__requires": [ ],
@@ -7310,4 +7311,4 @@
    "timezone": "browser",
    "title": "Couchbase Sync Gateway Dashboard",
    "version": 0
-}
+}}
