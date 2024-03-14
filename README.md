@@ -1,6 +1,8 @@
 # Quickstart for Sync Gateway Developer Kit (Docker Compose Quickstart)
  A quick starting kit for developers deploying via Docker Compose the Sync Gateway +3.1.3 & Couchbase +7.2.3 cluster environment using Scope &amp; Collections
 
+![overview](docs/assets/00_overview.png)
+
 # Pre-requisites
 
 * Docker Compose 
