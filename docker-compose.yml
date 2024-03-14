@@ -8,6 +8,7 @@ services:
       - CB_SERVICES=kv,n1ql,index
       - CB_CLUSTER_NAME=demo
       - CB_INDEXSTORAGE=plasma
+      - CB_DATARAM=1024
     volumes:
       - "./db/couchbase:/opt/couchbase/var/lib/couchbase"
       - "./db/config:/startup"
@@ -112,6 +113,18 @@ services:
       - "9090:9090" 
     networks:
       - workshop
+
+
+#  alertmanager:
+#    image: prom/alertmanager:v0.23.0
+#    container_name: alertmanager
+#    restart: unless-stopped
+#    ports:
+#      - "9093:9093"
+#    volumes:
+#      - ./alertmanager/config:/config
+#      - ./alertmanager/data:/data
+#    command: --config.file=/config/alertmanager.yml --log.level=debug
   
   grafana:
    image: grafana/grafana-enterprise

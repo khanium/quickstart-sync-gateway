@@ -15,6 +15,9 @@ scrape_configs:
       password: "password"
     static_configs:
       - targets: [ "couchbase:8091"]
+        labels:
+           cluster_name: "demo7"
+           node: "node1"
 
   - job_name: 'sgw_metrics'
     metrics_path: /_metrics
