@@ -1,0 +1,89 @@
+# Copyright 2020-Present Couchbase, Inc.
+#
+# Use of this software is governed by the Business Source License included in
+# the file licenses/BSL-Couchbase.txt.  As of the Change Date specified in that
+# file, in accordance with the Business Source License, use of this software
+# will be governed by the Apache License, Version 2.0, included in the file
+# licenses/APL2.txt.
+
+groups:
+  - name: eci-custom.rules
+    rules:
+    - alert: HighIndexGrowthRate in ram
+      expr: increase(index_ram_usage{index!~".*replica.*"}[60m]) > (index_ram_usage{index!~".*replica.*"} * 0.3)
+      for: 60m
+      labels:
+          severity: warning
+      annotations:
+          summary: "High index growth rate detected"
+          description: "Database index has grown more than 30% in the last 60 minutes."
+    - alert: HighIndexGrowthRate in disk
+      expr: increase(index_disk_size{index!~".*replica.*"}[60m]) > (index_disk_size{index!~".*replica.*"} * 0.3)
+      for: 60m
+      labels:
+          severity: warning
+      annotations:
+          summary: "High index growth rate detected"
+          description: "Database index has grown more than 30% in the last 60 minutes."
+
+
+
+
+    - alert: HighMemoryDecrease
+      expr: delta(node_memory_MemAvailable_bytes[1h]) < -node_memory_MemAvailable_bytes * 0.1
+      for: 2h
+      labels:
+         severity: warning
+      annotations:
+         summary: "High memory decrease detected"
+         description: "Total memory available has decreased more than 10% in an hour for a continuous period of 2 hours."
+
+    - alert: LowMemoryAvailable
+      expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.1
+      for: 5m
+      labels:
+         severity: critical
+      annotations:
+         summary: "Low memory available"
+         description: "Total memory available is less than 10% of the total memory."
+
+    - alert: IndexedItemsDecrease
+      expr: delta(index_items_count{index!~".*replica.*"}[1h]) < - (index_items_count{index!~".*replica.*"} * 0.2)
+      for: 1h
+      labels:
+          severity: critical
+      annotations:
+          summary: "Significant decrease in indexed items"
+          description: "The number of indexed items has decreased by more than 20% in the last hour."
+
+    - alert: HighMutationRate
+      expr: increase(index_updates{index!~".*replica.*"}[2h]) > (index_updates{index!~".*replica.*"} * 0.3)
+      for: 2h
+      labels:
+        severity: warning
+      annotations:
+        summary: "High mutation rate detected"
+        description: "More than 30% of total items have been mutated in the last 2 hours."
+
+
+
+    - alert: IndexNotScanned
+      expr: time() - index_last_known_scan_time{index!~".*replica.*"} > (10 * 24 * 60 * 60)
+      for: 12h
+      labels:
+          severity: warning
+      annotations:
+          summary: "Index not scanned in last 10 days"
+          description: "The index has not been scanned in the last 10 days, which may affect performance or data accuracy."
+
+    - alert: Fragmentation
+      expr: increase(index_fragmentation{index!~".*replica.*"}[1h]) > 20
+      for: 1h
+      labels:
+          severity: warning
+      annotations:
+          summary: "Index fragmentation increased in the last hour by 20%"
+          description: "Index fragmentation increased in the last hour by 20%"
+
+
+#fragmentacion de indice 20%
