@@ -117,6 +117,7 @@ services:
 
   loki:
     image: grafana/loki:2.9.4
+    container_name: loki
     ports:
       - "3100:3100"
 #    volumes:
@@ -127,6 +128,7 @@ services:
 
   promtail:
     image: grafana/promtail:2.9.4
+    container_name: promtail
     volumes:
       - ./promtail/log:/var/log
  #     - ./promtail/promtail-local-config.yml:/etc/promtail/config.yml
