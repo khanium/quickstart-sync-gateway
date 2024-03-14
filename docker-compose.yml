@@ -115,6 +115,26 @@ services:
       - workshop
 
 
+  loki:
+    image: grafana/loki:2.9.4
+    ports:
+      - "3100:3100"
+#    volumes:
+#      - ./loki/local-config.yml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - workshop
+
+  promtail:
+    image: grafana/promtail:2.9.4
+    volumes:
+      - ./promtail/log:/var/log
+ #     - ./promtail/promtail-local-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - workshop
+
+
 #  alertmanager:
 #    image: prom/alertmanager:v0.23.0
 #    container_name: alertmanager

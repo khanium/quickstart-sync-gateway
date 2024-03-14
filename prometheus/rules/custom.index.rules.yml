@@ -1,0 +1,32 @@
+# Copyright 2020-Present Couchbase, Inc.
+#
+# Use of this software is governed by the Business Source License included in
+# the file licenses/BSL-Couchbase.txt.  As of the Change Date specified in that
+# file, in accordance with the Business Source License, use of this software
+# will be governed by the Apache License, Version 2.0, included in the file
+# licenses/APL2.txt.
+
+groups:
+  # Recording Rules
+  - name: Couchbase Index Recording Rules
+    rules:
+      # RECORD: Record the # of replicas for an index
+      - record: index_num_replica
+        expr: >
+          count without (instance, index, replicaId) (index_items_count) - 1
+
+      # RECORD: The Index RAM Percent
+      - record: index_ram_percent
+        expr: >
+          (index_memory_used_total / ignoring(name) index_memory_quota) * 100
+
+  - name: index-eci.rules
+    rules:
+       - alert: HighIndexGrowthRate in ram
+         expr: increase(index_ram_usage{index!~".*replica.*"}[60m]) > (index_ram_usage{index!~".*replica.*"} * 0.3)
+         for: 60m
+         labels:
+           severity: warning
+         annotations:
+           summary: "High index growth rate detected"
+           description: "Database index has grown more than 30% in the last 60 minutes."

@@ -1,0 +1,186 @@
+groups:
+  # Recording Rules
+  - name: Couchbase Sync Gateway Recording Rules
+    rules:
+      - record: sgw:gsi:total_queries
+        expr: sum by (instance, database, job) ({__name__=~"sgw_gsi_views_.*_count"})
+
+  # Alerting Rules
+  - name: Couchbase Sync Gateway Alerting Rules
+    rules:
+      # ALERT: When there has been too many authentication failures
+      - alert: TooManyAuthFailuresInLastHour
+        expr: >
+          increase(sgw_security_auth_failed_count[1h]) > 1000
+        for: 5m
+        labels:
+          severity: warning
+          category: couchbase
+          service: sync-gateway
+        annotations:
+          runbook_url: ""
+          dashboard_id: ""
+          summary: >
+            Too Many Auth Failures in Last Hour
+          description: |
+            There has been more than 1000 authentication failures in the past hour.
+
+      # ALERT: When there has been too many document access failures
+      - alert: TooManyDocumentAccessFailuresInLastHour
+        expr: >
+          increase(sgw_security_num_access_errors[1h]) > 1000
+        for: 5m
+        labels:
+          severity: warning
+          category: couchbase
+          service: sync-gateway
+        annotations:
+          runbook_url: ""
+          dashboard_id: ""
+          summary: >
+            Too many Document Access Failures in last hour
+          description: |
+            There has been more than 1000 authentication failures in the past hour.
+
+      # ALERT: Too many document rejection failures
+      - alert: TooManyDocumentRejectionFailuresInLastHour
+        expr: increase(sgw_security_num_docs_rejected[1h]) > 1000
+        for: 5m
+        labels:
+          severity: warning
+          category: couchbase
+          service: sync-gateway
+        annotations:
+          runbook_url: ""
+          dashboard_id: ""
+          summary: >
+            Too many Document Rejection Failures in last hour
+          description: |
+            There has been more than 1000 rejection failures in the past hour.
+
+      # ALERT: When there is a High Revision Cache Miss Rate
+      - alert: HighRevCacheMissRate
+        expr: >
+          sgw_cache_rev_cache_misses
+          /
+          (
+            sgw_cache_rev_cache_misses + sgw_cache_rev_cache_hits
+          ) >= 0.8
+        for: 5m
+        labels:
+          severity: warning
+          category: couchbase
+          service: sync-gateway
+        annotations:
+          runbook_url: ""
+          dashboard_id: ""
+          summary: >
+            High Rev Cache Miss Rate
+          description: |
+            The Revisions Cache Miss rate {{ $value | humanizePercentage }} has exceeded 80%
+
+      # ALERT: When there is a High Channel Cache Miss Rate
+      - alert: HighChannelCacheMissRate
+        expr: >
+          sgw_cache_chan_cache_misses
+          /
+          (
+            sgw_cache_chan_cache_misses + sgw_cache_chan_cache_hits
+          ) >= 0.8
+        for: 5m
+        labels:
+          severity: warning
+          category: couchbase
+          service: sync-gateway
+        annotations:
+          runbook_url: ""
+          dashboard_id: ""
+          summary: >
+            High Channel Cache Miss Rate
+          description: |
+            The Channel Cache Miss rate {{ $value | humanizePercentage }} has exceeded 80%
+
+      # ALERT: When there is a High Delta Cache Miss Rate
+      - alert: HighDeltaCacheMissRate
+        expr: >
+          sgw_delta_sync_delta_sync_miss
+          /
+          (
+            sgw_delta_sync_delta_sync_miss + sgw_delta_sync_delta_cache_hit
+          ) >= 0.8
+        for: 5m
+        labels:
+          severity: warning
+          category: couchbase
+          service: sync-gateway
+        annotations:
+          runbook_url: ""
+          dashboard_id: ""
+          summary: >
+            High Delta Cache Miss Rate
+          description: |
+            The Delta Cache Miss rate {{ $value | humanizePercentage }} has exceeded 80%
+
+      # ALERT: When there are any errors
+      - alert: GlobalErrorCount
+        expr: >
+          increase(sgw_resource_utilization_error_count[5m]) > 1
+        labels:
+          severity: warning
+          category: couchbase
+          service: sync-gateway
+        annotations:
+          runbook_url: ""
+          dashboard_id: ""
+          summary: >
+            There has been {{ $value | humanize }} errors in Sync Gateway
+          description: |
+            There has been {{ $value | humanize }} errors in Sync Gateway
+
+      # ALERT:
+      - alert: WarnXattrSizeCount
+        expr: >
+          increase(sgw_database_warn_xattr_size_count[5m]) > 0
+        labels:
+          severity: warning
+          category: couchbase
+          service: sync-gateway
+        annotations:
+          runbook_url: ""
+          dashboard_id: ""
+          summary: >
+            A document had larger sync data than the maximum allowed by xattrs in the last 5min
+          description: |
+            A document had larger sync data than the maximum allowed by xattrs in the last 5min
+
+      - alert: SGRNumDocsFailedToPull
+        expr: >
+          increase(sgw_replication_sgr_num_docs_failed_to_pull[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          category: couchbase
+          service: sync-gateway
+        annotations:
+          runbook_url: ""
+          dashboard_id: ""
+          summary: >
+            Inter Sync Gateway Replication Failed Pulls {{ $value | humanize }}
+          description: |
+            There have been {{ $value | humanize }} failed Inter Sync Gateway Replication pulls in the past 5min
+
+      - alert: SGRNumDocsFailedToPush
+        expr: >
+          increase(sgw_replication_sgr_num_docs_failed_to_push[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          category: couchbase
+          service: sync-gateway
+        annotations:
+          runbook_url: ""
+          dashboard_id: ""
+          summary: >
+            Inter Sync Gateway Replication Failed Push {{ $value | humanize }}
+          description: |
+            There have been {{ $value | humanize }} failed Inter Sync Gateway Replication pushes in the past 5min
