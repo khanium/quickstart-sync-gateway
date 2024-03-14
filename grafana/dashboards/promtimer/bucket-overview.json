@@ -1,4 +1,4 @@
-{"dashboard":
+
 {
   "annotations": {
     "list": [
@@ -101,7 +101,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -203,7 +203,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
+            "uid": "Prometheus"
           },
           "editorMode": "code",
           "expr": "irate(kv_ops{bucket=\"$bucket\"}[5m])",
@@ -250,7 +250,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -397,7 +397,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -499,7 +499,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
+            "uid": "Prometheus"
           },
           "editorMode": "code",
           "expr": " irate(kv_ep_bg_fetched[5m])",
@@ -546,7 +546,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -648,7 +648,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
+            "uid": "Prometheus"
           },
           "editorMode": "code",
           "expr": "kv_ep_diskqueue_items{bucket=\"$bucket\"}",
@@ -695,7 +695,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -842,7 +842,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "kv_vb_perc_mem_resident_ratio",
       "fieldConfig": {
@@ -990,7 +990,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -1092,7 +1092,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
+            "uid": "Prometheus"
           },
           "editorMode": "code",
           "expr": "irate(kv_ops[1m])",
@@ -1138,7 +1138,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -1285,7 +1285,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -1432,7 +1432,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -1579,7 +1579,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "Computed as:`(irate(kv_ops{op=~\"set|set_meta|set_ret_meta|cas|decr|del_meta|del_ret_meta|incr|delete\"}[5m]))`",
       "fieldConfig": {
@@ -1727,7 +1727,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -1874,7 +1874,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -1976,7 +1976,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
+            "uid": "Prometheus"
           },
           "editorMode": "code",
           "expr": "kv_curr_items_tot{bucket=\"$bucket\"} - ignoring(name) kv_ep_num_non_resident{bucket=\"$bucket\"}",
@@ -2110,4 +2110,4 @@
   "uid": "bucket-overview",
   "version": 2,
   "weekStart": ""
-}}
+}

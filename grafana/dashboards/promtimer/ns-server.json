@@ -1,4 +1,4 @@
-{"dashboard":
+
 {
   "annotations": {
     "list": [
@@ -101,7 +101,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -248,7 +248,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -395,7 +395,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -542,7 +542,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -689,7 +689,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -836,7 +836,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -983,7 +983,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -1130,7 +1130,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -1277,7 +1277,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -1424,7 +1424,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -1571,7 +1571,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -1718,7 +1718,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -1865,7 +1865,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -2012,7 +2012,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -2159,7 +2159,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -2306,7 +2306,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -2453,7 +2453,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -2600,7 +2600,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -2747,7 +2747,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -2894,7 +2894,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -3065,4 +3065,4 @@
   "uid": "ns-server-dashboard",
   "version": 1,
   "weekStart": ""
-}}
+}

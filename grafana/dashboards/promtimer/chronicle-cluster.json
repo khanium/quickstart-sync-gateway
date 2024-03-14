@@ -1,4 +1,4 @@
-{"dashboard":
+
 {
   "annotations": {
     "list": [
@@ -101,7 +101,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -248,7 +248,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "Number of chronicle disk operations per second by type.\nComputed as: `irate(cm_chronicle_disk_latency_seconds_count[5m])`",
       "fieldConfig": {
@@ -396,7 +396,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "Average chronicle fsync latency (i.e. total time waiting for fsyncs\ndivided by the number of fsyncs in the period. Computed as: `1000 * irate(cm_chronicle_disk_latency_seconds_sum{op=\"sync\"}[5m]) /\nignoring(name) irate(cm_chronicle_disk_latency_seconds_count{op=\"sync\"}[5m])`",
       "fieldConfig": {
@@ -544,7 +544,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "Number of chronicle appends performed per second. Computed as:\n`irate(cm_chronicle_append_num_total[5m])`",
       "fieldConfig": {
@@ -692,7 +692,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -863,4 +863,4 @@
   "uid": "chronicle-cluster",
   "version": 1,
   "weekStart": ""
-}}
+}

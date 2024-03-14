@@ -1,4 +1,4 @@
-{"dashboard":
+
 {
   "annotations": {
     "list": [
@@ -177,7 +177,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "KV service CPU Utilization of all cores summed up, in percent\n\nsysproc_cpu_utilization{proc=\"memcached\"}",
       "fieldConfig": {
@@ -325,7 +325,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "KV service uptime in seconds\n\nkv_uptime_seconds",
       "fieldConfig": {
@@ -473,7 +473,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "Memory usage by the KV service, in bytes\n\nsysproc_mem_resident{proc=\"memcached\"}",
       "fieldConfig": {
@@ -621,7 +621,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "couch_docs_actual_disk_size",
       "fieldConfig": {
@@ -795,7 +795,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "For each node, computed as:\n`sum(irate(kv_ops[1m]))`",
       "fieldConfig": {
@@ -943,7 +943,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "Gets computed as: `sum(irate(kv_ops{op=\"get\"}[1m]))`\nMutations computed as:`sum(irate(kv_ops{op=~\"set|set_meta|set_ret_meta|cas|decr|del_meta|del_ret_meta|incr|delete\"}[1m]))`",
       "fieldConfig": {
@@ -1091,7 +1091,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "For each node computed as:\n`sum(irate(kv_ep_bg_fetched[5m]))`",
       "fieldConfig": {
@@ -1239,7 +1239,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "For each node computed as:\n`histogram_quantile(0.90, sum by (le) (irate(kv_cmd_duration_seconds_bucket{opcode=~\"GET|GAT\"}[10m])))`",
       "fieldConfig": {
@@ -1413,7 +1413,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "Number of KV service connections accumulated over time\n\nkv_total_connections",
       "fieldConfig": {
@@ -1561,7 +1561,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "Number of KV service connections currently open\n\nkv_curr_connections, kv_daemon_connections, kv_system_connections",
       "fieldConfig": {
@@ -1735,7 +1735,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "Whether the audit daemon is enabled\n\nkv_audit_enabled",
       "fieldConfig": {
@@ -1853,7 +1853,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "kv_audit_dropped_events",
       "fieldConfig": {
@@ -2025,4 +2025,4 @@
   "uid": "kv-cluster",
   "version": 1,
   "weekStart": ""
-}}
+}

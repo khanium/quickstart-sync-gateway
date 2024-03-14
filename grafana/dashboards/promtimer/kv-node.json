@@ -1,4 +1,4 @@
-{"dashboard":
+
 {
   "annotations": {
     "list": [
@@ -177,7 +177,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "Computed as:\n`sum by (bucket) (irate(kv_ops[5m]))`",
       "fieldConfig": {
@@ -324,7 +324,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "Computed as: `sum by (bucket) (irate(kv_ops{op=\"get\"}[5m]))`",
       "fieldConfig": {
@@ -471,7 +471,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "Computed as:`sum by (bucket) (irate(kv_ops{op=~\"set|set_meta|set_ret_meta|cas|decr|del_meta|del_ret_meta|incr|delete\"}[5m]))`",
       "fieldConfig": {
@@ -618,7 +618,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "For each node computed as:\n`sum(irate(kv_ep_bg_fetched[5m]))`",
       "fieldConfig": {
@@ -765,7 +765,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "For each node computed as:\n`histogram_quantile(0.90, sum by (le) (irate(kv_cmd_duration_seconds_bucket{opcode=~\"GET|GAT\"}[10m])))`",
       "fieldConfig": {
@@ -912,7 +912,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+        "uid": "Prometheus"
       },
       "description": "For each node computed as:\n`topk(5, sum by (opcode) (kv_cmd_duration_seconds_count))`",
       "fieldConfig": {
@@ -7608,4 +7608,4 @@
   "uid": "kv-node",
   "version": 1,
   "weekStart": ""
-}}
+}

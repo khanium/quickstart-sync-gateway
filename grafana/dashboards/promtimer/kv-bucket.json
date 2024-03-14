@@ -1,4 +1,4 @@
-{"dashboard":
+
 {
   "annotations": {
     "list": [
@@ -5239,7 +5239,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
+          "uid": "Prometheus"
         },
         "definition": "label_values(kv_bg_wait_seconds_bucket,bucket)",
         "hide": 0,
@@ -5282,4 +5282,4 @@
   "uid": "kv-nodebucket",
   "version": 2,
   "weekStart": ""
-}}
+}

@@ -1,4 +1,4 @@
-{"dashboard":
+
 {
   "annotations": {
     "list": [
@@ -882,4 +882,4 @@
   "uid": "chronicle-node",
   "version": 1,
   "weekStart": ""
-}}
+}
