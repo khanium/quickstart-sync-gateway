@@ -4,7 +4,9 @@
     "rbacUsername": "sync_gateway",
     "rbacPassword": "password",
     "roles": [
-      "mobile_sync_gateway[demo]"
+      "mobile_sync_gateway[demo]",
+      "sync_gateway_app[demo]",
+      "sync_gateway_configurator[demo]"
     ]
   },
   {

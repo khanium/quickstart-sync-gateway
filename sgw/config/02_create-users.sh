@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sleep 10s
+
 # Specify the path to your JSON array file
 json_file="users.json"
 

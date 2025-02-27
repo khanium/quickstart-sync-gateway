@@ -7,7 +7,16 @@
     "saslPassword": "",
     "evictionPolicy": "fullEviction",
     "replicaNumber": 0,
-    "flushEnabled": 1
+    "flushEnabled": 1,
+    "scopes": {
+      "custom": {
+        "collections": [
+           "typeA",
+           "typeB",
+           "typeC"
+         ]
+       }
+     }
   }
  ,
   {

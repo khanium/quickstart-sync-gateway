@@ -1,10 +1,10 @@
 #!/bin/bash
-sleep 1
+sleep 10s
 echo '-- --------------------------------- --'
 echo '   step 1 - create database '
 echo '-- --------------------------------- ---'
 ./01_create-database.sh
-sleep 10
+sleep 10s
 echo '-- ---------------------------------- --'
 echo '   step 2 - create Database Users '
 echo '-- --------------------------------- --'
