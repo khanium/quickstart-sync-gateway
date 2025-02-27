@@ -12,12 +12,12 @@
 0. Build SGW docker image
 
 ```
-docker compose build
+docker compose build --no-cache
 ```
 
 ![build](/docs/assets/00_build.png)
 
-1. Setup Docker Compose Couchbase Server & Sync Gateway Instances
+1. Deploy Docker Compose Couchbase Server & Sync Gateway Instances
 
 ```
 docker-compose up
@@ -139,21 +139,6 @@ docker-compose down
 ./cleanup-data.sh
 ```
 
-# Configure Couchbase Server
-
--- TBD -- 
-
-## Buckets
-## Scope/Collections
-## Users
-
-
-# Configure Sync Gateway
-
--- TBD --
-
-## Database
-## Users
 
 # References
 
