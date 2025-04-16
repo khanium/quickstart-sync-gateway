@@ -12,6 +12,7 @@ datasources:
   - name: Prometheus
     type: prometheus
     orgId: 1
+    isDefault: true
     url: http://prometheus:9090
     access: proxy
   # <map> fields that will be converted to json and stored in json_data
@@ -20,12 +21,12 @@ datasources:
        tlsSkipVerify: true
        tlsAuth: false
        tlsAuthWithCACert: false
-  - name: Loki
-    type: loki
-    access: proxy
-    orgId: 1
-    url: http://loki:3100
-    basicAuth: false
-    isDefault: true
-    version: 1
-    editable: false
+#  - name: Loki
+#    type: loki
+#    access: proxy
+#    orgId: 1
+#    url: http://loki:3100
+#    basicAuth: false
+#    isDefault: true
+#    version: 1
+#    editable: false

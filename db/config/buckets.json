@@ -20,7 +20,7 @@
   }
  ,
   {
-    "name": "firefly-stflow",
+    "name": "nonmobilebucket",
     "ramQuotaMB": 500,
     "bucketType": "couchbase",
     "authType": "sasl",

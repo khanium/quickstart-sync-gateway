@@ -36,31 +36,6 @@ services:
     entrypoint: [""]
     command: sh -c "/opt/couchbase/init/init-cbserver.sh"
 
-#    volumes:
-#      - "./db/couchbase:/opt/couchbase/var/lib/couchbase"
-#      - "./db/config:/startup"
-    # In the command section, $ are replaced with $$ to avoid the error 'Invalid interpolation format for "command" option'
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://Administrator:password@localhost:8091/pools/default/buckets/demo/scopes"]
-#      interval: 10s
-#      timeout: 3s
-#      retries: 60
-#    command:
-#      - bash
-#      - -c
-#      - |
-#        echo 'initialization...'
-#        sleep 10;
-#        chmod +x /startup/load.sh
-#        cd /startup
-#        /startup/load.sh
-#    ports:
-#      - "8091-8096:8091-8096"
-#      - "18091-18096:18091-18096"
-#      - "11207:11207"
-#      - "11210-11211:11210-11211"
-#    networks:
-#      - workshop
 
   sync-gateway:
     build: ./sgw
@@ -103,48 +78,48 @@ services:
       - workshop
 
 
-#  node-exporter:
-#   image: prom/node-exporter:latest
-#   container_name: node-exporter
-#   restart: unless-stopped
-#   volumes:
-#      # Remember to use read-only bind mounts.
-#      - /proc:/host/proc:ro
-#      - /sys:/host/sys:ro
-#      - /:/rootfs:ro,rslave
-#   command:
-#     - '--path.procfs=/host/proc'
-#     - '--path.rootfs=/rootfs'
-#     - '--path.sysfs=/host/sys'
-#     - "--collector.filesystem.ignored-mount-points='^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'"
-#   ports:
-#     - "9100:9100" 
-#   networks:
-#     - workshop
+  node-exporter:
+   image: prom/node-exporter:latest
+   container_name: node-exporter
+   restart: unless-stopped
+   volumes:
+      # Remember to use read-only bind mounts.
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro,rslave
+   command:
+     - '--path.procfs=/host/proc'
+     - '--path.rootfs=/rootfs'
+     - '--path.sysfs=/host/sys'
+     - "--collector.filesystem.ignored-mount-points='^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'"
+   ports:
+     - "9100:9100" 
+   networks:
+     - workshop
 
-#  prometheus:
-#    image: prom/prometheus:latest
-#    container_name: prometheus
-#    restart: unless-stopped
-#    depends_on:
-#      couchbase:
-#        condition: service_healthy
-#    labels: 
-#      clusterName: demo716
-#    volumes:
-#      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-#      - ./prometheus/data:/prometheus
-#      - ./prometheus/rules:/etc/prometheus/rules
-#    command:
-#      - '--config.file=/etc/prometheus/prometheus.yml'
-#      - '--storage.tsdb.path=/prometheus'
-#      - '--web.console.libraries=/etc/prometheus/console_libraries'
-#      - '--web.console.templates=/etc/prometheus/consoles'
-#      - '--web.enable-lifecycle'
-#    ports:
-#      - "9090:9090" 
-#    networks:
-#      - workshop
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    depends_on:
+      sync-gateway-init:
+        condition: service_completed_successfully
+    labels: 
+      clusterName: demo
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/data:/prometheus
+      - ./prometheus/rules:/etc/prometheus/rules
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090" 
+    networks:
+      - workshop
 
 
 #  loki:
@@ -180,28 +155,28 @@ services:
 #      - ./alertmanager/data:/data
 #    command: --config.file=/config/alertmanager.yml --log.level=debug
   
-#  grafana:
-#   image: grafana/grafana-enterprise
-#   container_name: grafana
-#   restart: unless-stopped
-#   environment:
-#     - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
-#     - GF_AUTH_ANONYMOUS_ENABLED=true
-#     - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-#     - GF_INSTALL_PLUGINS=grafana-simple-json-datasource
-#   ports:
-#     - '3000:3000'
-#   depends_on:
-#     - prometheus    
-#   labels: 
-#     clusterName: demoG716
-#   volumes:
-#     - ./grafana/data:/var/lib/grafana
-#     - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
-#     - ./grafana/dashboards:/var/lib/grafana/dashboards
-#     - ./grafana/datasources:/etc/grafana/provisioning/datasources
-#   networks:
-#     - workshop
+  grafana:
+   image: grafana/grafana-enterprise
+   container_name: grafana
+   restart: unless-stopped
+   environment:
+     - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+     - GF_AUTH_ANONYMOUS_ENABLED=true
+     - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+     - GF_INSTALL_PLUGINS=grafana-simple-json-datasource
+   ports:
+     - '3000:3000'
+   depends_on:
+     - prometheus    
+   labels: 
+     clusterName: demoG716
+   volumes:
+     - ./grafana/data:/var/lib/grafana
+     - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+     - ./grafana/dashboards:/var/lib/grafana/dashboards
+     - ./grafana/datasources:/etc/grafana/provisioning/datasources
+   networks:
+     - workshop
 
 networks:
   workshop:
