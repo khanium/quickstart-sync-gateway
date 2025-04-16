@@ -112,8 +112,64 @@ replication scope: custom
 replication collections: typeA,typeB
 authenticator: 
 	username: userdb1
-    password: password 
+    password: Password1! 
 ```
+
+Or you can use this simple java client main example code:
+
+```java
+    public static void main(String[] args) throws CouchbaseLiteException, URISyntaxException, InterruptedException, IOException {
+        System.out.println("Starting CouchbaseLite at " + LocalTime.now());
+        com.couchbase.lite.CouchbaseLite.init();
+        Thread.sleep(2000);
+        String username = System.getProperty("user.name") != null ? System.getProperty("user.name") : "userdb1";
+        String password = System.getProperty("user.password") != null ? System.getProperty("user.password") : "Password1!";
+        String sgwURI = System.getProperty("sgw.uri") != null ? System.getProperty("sgw.uri") : "ws://localhost:4984/db";
+        
+        DatabaseConfiguration config = new DatabaseConfiguration();
+        config.setFullSync(false);
+        config.setDirectory("data/"+username);
+        Database database = new Database("db", config);
+
+        Collection colA = database.createCollection("typeA", "custom");
+        Collection colB = database.createCollection("typeB", "custom");
+        Collection colC = database.createCollection("typeC", "custom");
+
+        URI syncGatewayUri = new URI(sgwURI);
+        ReplicatorConfiguration replConfig = new ReplicatorConfiguration(new URLEndpoint(syncGatewayUri));  // working with custom scope and collections
+
+        replConfig.setType(PUSH_AND_PULL);
+        replConfig.setAutoPurgeEnabled(true);
+        replConfig.setAuthenticator(new BasicAuthenticator(username, password.toCharArray()));
+        replConfig.setContinuous(true);
+        CollectionConfiguration collectionConfiguration = new CollectionConfiguration();
+        collectionConfiguration.setConflictResolver(ConflictResolver.DEFAULT);
+        replConfig.addCollections(List.of(colA, colB, colC), collectionConfiguration);
+
+        Replicator replicator = new Replicator(replConfig);
+        replicator.addChangeListener(change -> {
+
+            if (change.getStatus().getError() != null) {
+                System.err.println("Error in replication ("+change.getStatus().getActivityLevel()+"): " + change.getStatus().getError().getMessage());
+            } else {
+                System.out.println("Replication in progress: " + change.getStatus().getActivityLevel());
+            }
+
+            if(change.getStatus().getActivityLevel().equals(ReplicatorActivityLevel.IDLE) || change.getStatus().getActivityLevel().equals(ReplicatorActivityLevel.STOPPED)){
+                System.out.println("Documents in the local database: " + colA.getCount());
+
+                if (change.getStatus().getActivityLevel().equals(ReplicatorActivityLevel.STOPPED)) {
+                    System.out.println("Exiting..."); 
+                    System.exit(0);
+                }
+            }
+        });
+
+        replicator.start();
+    }
+```
+
+Note: userdb1 only has permissions on "blue" channel for collections `typeA` and `typeB`. To sync documents you would need to create documents with `channels: ["blue"]` on these collections or change the admin channels permissions in the `sgw/config/users.json` file 
 
 
 # Start / Stop Docker Compose
