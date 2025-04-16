@@ -117,6 +117,28 @@ authenticator:
 
 Or you can use this simple java client main example code:
 
+Dependencies on **pom.xml**
+```
+    <repositories>
+        <repository>
+            <id>couchbase-lite-repo</id>
+            <name>couchbase-repo</name>
+            <url>https://mobile.maven.couchbase.com/maven2/dev/</url>
+        </repository>
+    </repositories>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.couchbase.lite</groupId>
+            <artifactId>couchbase-lite-java-ee</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+    </dependencies>
+ 
+```
+
+**MainClass.java**
+
 ```java
     public static void main(String[] args) throws CouchbaseLiteException, URISyntaxException, InterruptedException, IOException {
         System.out.println("Starting CouchbaseLite at " + LocalTime.now());
@@ -133,7 +155,7 @@ Or you can use this simple java client main example code:
 
         Collection colA = database.createCollection("typeA", "custom");
         Collection colB = database.createCollection("typeB", "custom");
-        Collection colC = database.createCollection("typeC", "custom");
+        
 
         URI syncGatewayUri = new URI(sgwURI);
         ReplicatorConfiguration replConfig = new ReplicatorConfiguration(new URLEndpoint(syncGatewayUri));  // working with custom scope and collections
@@ -144,7 +166,7 @@ Or you can use this simple java client main example code:
         replConfig.setContinuous(true);
         CollectionConfiguration collectionConfiguration = new CollectionConfiguration();
         collectionConfiguration.setConflictResolver(ConflictResolver.DEFAULT);
-        replConfig.addCollections(List.of(colA, colB, colC), collectionConfiguration);
+        replConfig.addCollections(List.of(colA, colB), collectionConfiguration);
 
         Replicator replicator = new Replicator(replConfig);
         replicator.addChangeListener(change -> {
