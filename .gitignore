@@ -1,1 +1,19 @@
 .DS_Store
+
+grafana.db
+grafana-old.db
+
+#couchbase data...
+db/couchbase/*
+# deleting sync gateway logs...
+sgw/logs/*
+# deleting promtail log...
+promtail/log/*
+# deleting prometheus data...
+prometheus/data/*
+# deleting alertmanager data...
+alertmanager/data/*
+# deleting grafana db data...
+grafana/data/*
+
+
