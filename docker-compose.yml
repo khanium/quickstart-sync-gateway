@@ -86,7 +86,7 @@ services:
       # Remember to use read-only bind mounts.
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
-      - /:/rootfs:ro,rslave
+      #- /:/rootfs:ro,rslave #commented line to avoid to grant root permissions to the node-exporter container
    command:
      - '--path.procfs=/host/proc'
      - '--path.rootfs=/rootfs'
