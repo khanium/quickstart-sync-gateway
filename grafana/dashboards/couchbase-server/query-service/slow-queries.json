@@ -1,0 +1,4570 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Identify slow or poor performing Couchbase N1QL Queries",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 56,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "N1QL Performance Best Practices Guide",
+      "tooltip": "",
+      "type": "link",
+      "url": "https://developer.couchbase.com/learn/n1ql-query-performance-guide"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Identifying and Tuning Slow Queries",
+      "tooltip": "",
+      "type": "link",
+      "url": "https://www.youtube.com/watch?v=VlvL6jYCENw"
+    }
+  ],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 19,
+      "panels": [],
+      "title": "Charts",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "Total # of Slow Queries",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 1
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT request_time_ms,        COUNT(1) AS total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(DATE_TRUNC_STR(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':')), 'minute')) WHERE (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END GROUP BY request_time_ms ORDER BY request_time_ms ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 300,
+          "columns": [
+            {
+              "selector": "request_time_ms",
+              "text": "time",
+              "type": "timestamp_epoch"
+            },
+            {
+              "selector": "total",
+              "text": "total",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].request_time_ms",
+              "type": "time"
+            },
+            {
+              "jsonPath": "$.results[*].total",
+              "name": "",
+              "type": "number"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "results",
+          "source": "url",
+          "type": "json",
+          
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT request_time_ms,        COUNT(1) AS total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(DATE_TRUNC_STR(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':')), 'minute')) WHERE (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END GROUP BY request_time_ms ORDER BY request_time_ms ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Count of Slow Queries",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "Total # of Fetches for Slow Queries",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 8,
+        "y": 1
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT request_time_ms,        SUM(IFMISSING(phaseCounts.`fetch`, 0)) AS total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(DATE_TRUNC_STR(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':')), 'minute')) WHERE (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END GROUP BY request_time_ms ORDER BY request_time_ms ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 300,
+          "columns": [
+            {
+              "selector": "request_time_ms",
+              "text": "time",
+              "type": "timestamp_epoch"
+            },
+            {
+              "selector": "total",
+              "text": "total",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].request_time_ms",
+              "type": "time"
+            },
+            {
+              "jsonPath": "$.results[*].total",
+              "name": "",
+              "type": "number"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "results",
+          "source": "url",
+          "type": "json",
+          
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT request_time_ms,        SUM(IFMISSING(phaseCounts.`fetch`, 0)) AS total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(DATE_TRUNC_STR(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':')), 'minute')) WHERE (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END GROUP BY request_time_ms ORDER BY request_time_ms ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}\n         ",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Sum of Slow Query Fetches",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "Sum of bytes sent back for slow query responses",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 1
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT request_time_ms,        SUM(IFMISSING(resultSize, 0)) AS total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(DATE_TRUNC_STR(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':')), 'minute')) WHERE (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END GROUP BY request_time_ms ORDER BY request_time_ms ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 300,
+          "columns": [
+            {
+              "selector": "request_time_ms",
+              "text": "time",
+              "type": "timestamp_epoch"
+            },
+            {
+              "selector": "total",
+              "text": "total",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].request_time_ms",
+              "type": "time"
+            },
+            {
+              "jsonPath": "$.results[*].total",
+              "name": ""
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "results",
+          "source": "url",
+          "type": "json",
+          
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT request_time_ms,        SUM(IFMISSING(resultSize, 0)) AS total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(DATE_TRUNC_STR(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':')), 'minute')) WHERE (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END GROUP BY request_time_ms ORDER BY request_time_ms ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Sum of Slow Query Response Bytes",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 7
+      },
+      "id": 33,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Total"
+          }
+        ]
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT  users,        COUNT(1) AS total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(DATE_TRUNC_STR(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':')), 'minute')) WHERE (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END GROUP BY users ORDER BY users ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 300,
+          "columns": [
+            {
+              "selector": "users",
+              "text": "User",
+              "type": "string"
+            },
+            {
+              "selector": "total",
+              "text": "Total",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].users",
+              "name": "User",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].total",
+              "name": "Total",
+              "type": "number"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "results",
+          "source": "url",
+          "type": "json",
+          
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT  users,        COUNT(1) AS total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(DATE_TRUNC_STR(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':')), 'minute')) WHERE (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END GROUP BY users ORDER BY users ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Total Slow Queries by User",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Lower %"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Upper %"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Min. Selectivity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 110
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Max. Selectivity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 114
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 7
+      },
+      "id": 40,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Lower %"
+          }
+        ]
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"WITH breakdown AS (     SELECT query_selectivity_percent,            PERCENT_RANK() OVER (                ORDER BY query_selectivity_percent ) AS percentile     FROM system:completed_requests     LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),         query_selectivity_percent = IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0)     WHERE (request_time_ms / 1000) >= $from         AND (request_time_ms / 1000) <= $to         AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%'  AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END) SELECT ROUND(a.`lower`, 2) AS `lower`,        a.`upper`,        IFNULL((            SELECT RAW MIN(b.query_selectivity_percent)            FROM breakdown AS b            WHERE b.percentile >= a.`lower`                AND b.percentile <= a.`upper` )[0], 0) AS `min`,        IFNULL((            SELECT RAW MAX(b.query_selectivity_percent)            FROM breakdown AS b            WHERE b.percentile >= a.`lower`                AND b.percentile <= a.`upper` )[0], 0) AS `max`,        IFNULL((            SELECT RAW COUNT(1)            FROM breakdown AS b            WHERE b.percentile >= a.`lower`                AND b.percentile <= a.`upper` )[0], 0) AS total FROM ([ { \\\"lower\\\": 0, \\\"upper\\\": 0.2 }, { \\\"lower\\\": 0.2000000000000001, \\\"upper\\\": 0.4 }, { \\\"lower\\\": 0.4000000000000001, \\\"upper\\\": 0.6 }, { \\\"lower\\\": 0.6000000000000001, \\\"upper\\\": 0.8 }, { \\\"lower\\\": 0.8000000000000001, \\\"upper\\\": 1 } ]) AS a ORDER BY `lower` ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 300,
+          "columns": [
+            {
+              "selector": "lower",
+              "text": "Lower%",
+              "type": "number"
+            },
+            {
+              "selector": "upper",
+              "text": "Upper%",
+              "type": "number"
+            },
+            {
+              "selector": "min",
+              "text": "Min.Selectivity",
+              "type": "number"
+            },
+            {
+              "selector": "max",
+              "text": "Max.Selectivity",
+              "type": "number"
+            },
+            {
+              "selector": "total",
+              "text": "Total",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].lower",
+              "name": "Lower %",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].upper",
+              "name": "Upper %",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].min",
+              "name": "Min. Selectivity",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].max",
+              "name": "Max. Selectivity",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].total",
+              "name": "Total",
+              "type": "number"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "results",
+          "source": "url",
+          "type": "json",
+          
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"WITH breakdown AS (     SELECT query_selectivity_percent,            PERCENT_RANK() OVER (                ORDER BY query_selectivity_percent ) AS percentile     FROM system:completed_requests     LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),         query_selectivity_percent = IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0)     WHERE (request_time_ms / 1000) >= $from         AND (request_time_ms / 1000) <= $to         AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%'  AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END) SELECT ROUND(a.`lower`, 2) AS `lower`,        a.`upper`,        IFNULL((            SELECT RAW MIN(b.query_selectivity_percent)            FROM breakdown AS b            WHERE b.percentile >= a.`lower`                AND b.percentile <= a.`upper` )[0], 0) AS `min`,        IFNULL((            SELECT RAW MAX(b.query_selectivity_percent)            FROM breakdown AS b            WHERE b.percentile >= a.`lower`                AND b.percentile <= a.`upper` )[0], 0) AS `max`,        IFNULL((            SELECT RAW COUNT(1)            FROM breakdown AS b            WHERE b.percentile >= a.`lower`                AND b.percentile <= a.`upper` )[0], 0) AS total FROM ([ { \\\"lower\\\": 0, \\\"upper\\\": 0.2 }, { \\\"lower\\\": 0.2000000000000001, \\\"upper\\\": 0.4 }, { \\\"lower\\\": 0.4000000000000001, \\\"upper\\\": 0.6 }, { \\\"lower\\\": 0.6000000000000001, \\\"upper\\\": 0.8 }, { \\\"lower\\\": 0.8000000000000001, \\\"upper\\\": 1 } ]) AS a ORDER BY `lower` ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Query Selectivity Percentile Breakdown",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Lower %"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Upper %"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Min. Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Max. Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 7
+      },
+      "id": 39,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Lower %"
+          }
+        ]
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"WITH breakdown AS (     SELECT elapsed_time_ms,         PERCENT_RANK() OVER (ORDER BY elapsed_time_ms ) AS percentile     FROM system:completed_requests     LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),         elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6)     WHERE (request_time_ms / 1000) >= $from         AND (request_time_ms / 1000) <= $to         AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END) SELECT ROUND(a.`lower`, 2) AS `lower`, a.`upper`,      IFNULL((       SELECT RAW MIN(b.elapsed_time_ms)        FROM breakdown AS b        WHERE b.percentile >= a.`lower` AND b.percentile <= a.`upper`     )[0], 0) AS `min`,     IFNULL((       SELECT RAW MAX(b.elapsed_time_ms)       FROM breakdown AS b        WHERE b.percentile >= a.`lower` AND b.percentile <= a.`upper`     )[0], 0) AS `max`,     IFNULL((         SELECT RAW COUNT(1)          FROM breakdown AS b          WHERE b.percentile >= a.`lower` AND b.percentile <= a.`upper`     )[0], 0) AS total FROM ([   {      \\\"lower\\\": 0,      \\\"upper\\\": 0.2   },   {      \\\"lower\\\": 0.2000000000000001,      \\\"upper\\\": 0.4   },   {      \\\"lower\\\": 0.4000000000000001,      \\\"upper\\\": 0.6   },   {      \\\"lower\\\": 0.6000000000000001,      \\\"upper\\\": 0.8   },   {      \\\"lower\\\": 0.8000000000000001,      \\\"upper\\\": 1   } ]) AS a ORDER BY `lower` ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 300,
+          "columns": [
+            {
+              "selector": "lower",
+              "text": "Lower%",
+              "type": "number"
+            },
+            {
+              "selector": "upper",
+              "text": "Upper%",
+              "type": "number"
+            },
+            {
+              "selector": "min",
+              "text": "Min.Time(ms)",
+              "type": "number"
+            },
+            {
+              "selector": "max",
+              "text": "Max.Time(ms)",
+              "type": "number"
+            },
+            {
+              "selector": "total",
+              "text": "Total",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].lower",
+              "name": "Lower %",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].upper",
+              "name": "Upper %",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].min",
+              "name": "Min. Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].max",
+              "name": "Max. Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].total",
+              "name": "Total",
+              "type": "number"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "results",
+          "source": "url",
+          "type": "json",
+          
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"WITH breakdown AS (     SELECT elapsed_time_ms,         PERCENT_RANK() OVER (ORDER BY elapsed_time_ms ) AS percentile     FROM system:completed_requests     LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),         elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6)     WHERE (request_time_ms / 1000) >= $from         AND (request_time_ms / 1000) <= $to         AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'         AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END) SELECT ROUND(a.`lower`, 2) AS `lower`, a.`upper`,      IFNULL((       SELECT RAW MIN(b.elapsed_time_ms)        FROM breakdown AS b        WHERE b.percentile >= a.`lower` AND b.percentile <= a.`upper`     )[0], 0) AS `min`,     IFNULL((       SELECT RAW MAX(b.elapsed_time_ms)       FROM breakdown AS b        WHERE b.percentile >= a.`lower` AND b.percentile <= a.`upper`     )[0], 0) AS `max`,     IFNULL((         SELECT RAW COUNT(1)          FROM breakdown AS b          WHERE b.percentile >= a.`lower` AND b.percentile <= a.`upper`     )[0], 0) AS total FROM ([   {      \\\"lower\\\": 0,      \\\"upper\\\": 0.2   },   {      \\\"lower\\\": 0.2000000000000001,      \\\"upper\\\": 0.4   },   {      \\\"lower\\\": 0.4000000000000001,      \\\"upper\\\": 0.6   },   {      \\\"lower\\\": 0.6000000000000001,      \\\"upper\\\": 0.8   },   {      \\\"lower\\\": 0.8000000000000001,      \\\"upper\\\": 1   } ]) AS a ORDER BY `lower` ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Elapsed Time Percentile Breakdown",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 14
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT request_time_ms,        COUNT(1) AS total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(DATE_TRUNC_STR(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':')), 'minute')) WHERE (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%'  AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END  AND phaseCounts.primaryScan IS NOT MISSING GROUP BY request_time_ms ORDER BY request_time_ms ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 300,
+          "columns": [
+            {
+              "selector": "request_time_ms",
+              "text": "time",
+              "type": "timestamp_epoch"
+            },
+            {
+              "selector": "total",
+              "text": "total",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].request_time_ms",
+              "type": "time"
+            },
+            {
+              "jsonPath": "$.results[*].total",
+              "name": ""
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "headers": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "refId": "A",
+          "root_selector": "results",
+          "source": "url",
+          "type": "json",
+          
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT request_time_ms,        COUNT(1) AS total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(DATE_TRUNC_STR(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':')), 'minute')) WHERE (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%'  AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END  AND phaseCounts.primaryScan IS NOT MISSING GROUP BY request_time_ms ORDER BY request_time_ms ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Count of Slow Queries using Primary Index",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "Total # of Queries that resulted in an error",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 8,
+        "y": 14
+      },
+      "id": 34,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT request_time_ms,        SUM(errorCount) AS total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(DATE_TRUNC_STR(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':')), 'minute')) WHERE (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END AND errorCount > 0 GROUP BY request_time_ms ORDER BY request_time_ms ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\", \n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 300,
+          "columns": [
+            {
+              "selector": "request_time_ms",
+              "text": "time",
+              "type": "timestamp_epoch"
+            },
+            {
+              "selector": "total",
+              "text": "total",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].request_time_ms",
+              "type": "time"
+            },
+            {
+              "jsonPath": "$.results[*].total",
+              "name": "",
+              "type": "number"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "headers": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "refId": "A",
+          "root_selector": "results",
+          "source": "url",
+          "type": "json",
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT request_time_ms,        SUM(errorCount) AS total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(DATE_TRUNC_STR(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':')), 'minute')) WHERE (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END AND errorCount > 0 GROUP BY request_time_ms ORDER BY request_time_ms ASC\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\", \n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Count of Queries with Errors",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 21,
+      "panels": [],
+      "title": "Most Recent Slow Queries",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Request Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 142
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elapsed Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 101
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Size"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "unit",
+                "value": "decbytes"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Selectivity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 80
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scan Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Fetches"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Statement"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Queue Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              },
+              {
+                "id": "custom.width",
+                "value": 93
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Cost"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 65
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "User"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Span"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": "span:(.*),.*",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trace-ID"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": ".*,trace-id:(.*)",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 4,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Request Time"
+          }
+        ]
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') as clientContextID,IFMISSING(preparedText, statement) AS statement,        users,phaseTimes,request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        resultCount,        resultSize,        query_selectivity_percent,        scan_results AS scanResults,        fetches,        IFMISSINGORNULL(cost,-1) AS cost FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),     service_time_ms = ROUND(STR_TO_DURATION(serviceTime) / 1e6),     elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6),     queue_time_us = ROUND( (STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3 , 3),     query_selectivity_percent = ROUND(IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0), 4),     scan_results = IFMISSING(phaseCounts.`indexScan`, 0),     fetches = IFMISSING(phaseCounts.`fetch`, 0),     cost = ARRAY_SUM(OBJECT_VALUES(phaseCounts)) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END  AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END  AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users != '' END ORDER BY request_time_ms DESC LIMIT $stop\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 10,
+          "columns": [],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "name": "Client Context ID",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Span",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Trace-ID",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].request_time_ms",
+              "name": "Request Time",
+              "type": "time"
+            },
+            {
+              "jsonPath": "$.results[*].phaseTimes",
+              "language": "jsonpath",
+              "name": "Phase Times"
+            },
+            {
+              "jsonPath": "$.results[*].users",
+              "name": "User",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].elapsed_time_ms",
+              "name": "Elapsed Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].queue_time_us",
+              "name": "Queue Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].resultSize",
+              "name": "Size",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].resultCount",
+              "name": "Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].query_selectivity_percent",
+              "name": "Selectivity",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].scanResults",
+              "name": "Scan Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].fetches",
+              "name": "Fetches",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].cost",
+              "name": "Cost",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].statement",
+              "name": "Statement",
+              "type": "string"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "params": [],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') as clientContextID,IFMISSING(preparedText, statement) AS statement,        users,phaseTimes,request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        resultCount,        resultSize,        query_selectivity_percent,        scan_results AS scanResults,        fetches,        IFMISSINGORNULL(cost,-1) AS cost FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),     service_time_ms = ROUND(STR_TO_DURATION(serviceTime) / 1e6),     elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6),     queue_time_us = ROUND( (STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3 , 3),     query_selectivity_percent = ROUND(IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0), 4),     scan_results = IFMISSING(phaseCounts.`indexScan`, 0),     fetches = IFMISSING(phaseCounts.`fetch`, 0),     cost = ARRAY_SUM(OBJECT_VALUES(phaseCounts)) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END  AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END  AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users != '' END ORDER BY request_time_ms DESC LIMIT $stop\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Top ${limit} Recent Slow Queries",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Client Context ID": 0,
+              "Cost": 13,
+              "Elapsed Time": 6,
+              "Fetches": 12,
+              "Phase Times": 5,
+              "Queue Time": 7,
+              "Request Time": 3,
+              "Results": 9,
+              "Scan Results": 11,
+              "Selectivity": 10,
+              "Size": 8,
+              "Span": 2,
+              "Statement": 14,
+              "Trace-ID": 1,
+              "User": 4
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 32
+      },
+      "id": 37,
+      "panels": [],
+      "title": "Most Common Slow Queries",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Last Executed"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 142
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elapsed Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 101
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Size"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "unit",
+                "value": "decbytes"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Selectivity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 80
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scan Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Fetches"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Statement"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Queue Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              },
+              {
+                "id": "custom.width",
+                "value": 93
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 65
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "User"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Span"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": "span:(.*),.*",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trace-ID"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": ".*,trace-id:(.*)",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 33
+      },
+      "id": 35,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Total"
+          }
+        ]
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID,IFMISSING(preparedText, statement) AS statement,        users, last_request_time_ms AS request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        result_count,        result_size,        query_selectivity_percent,        scan_results,        fetches,     IFMISSINGORNULL(cost,-1) AS   cost,        total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END  AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END  AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END GROUP BY IFMISSINGORNULL(clientContextID, 'unknown'),IFMISSING(preparedText, statement), users LETTING last_request_time_ms = MAX(request_time_ms),      service_time_ms = ROUND(AVG(STR_TO_DURATION(serviceTime) / 1e6), 2),     elapsed_time_ms = ROUND(AVG(STR_TO_DURATION(elapsedTime) / 1e6), 2),     queue_time_us = ROUND(AVG((STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3), 3),     query_selectivity_percent = ROUND(AVG(IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0)), 4),     scan_results = ROUND(AVG(IFMISSING(phaseCounts.`indexScan`, 0)), 2),     fetches = ROUND(AVG(IFMISSING(phaseCounts.`fetch`, 0)), 2),     cost = ROUND(AVG(ARRAY_SUM(OBJECT_VALUES(phaseCounts))), 2),     result_count = ROUND(AVG(resultCount), 2),     result_size = ROUND(AVG(resultSize), 2),     total = COUNT(1) ORDER BY total DESC, last_request_time_ms DESC LIMIT $stop\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 300,
+          "columns": [],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "name": "Client Context ID",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Span"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Trace-ID"
+            },
+            {
+              "jsonPath": "$.results[*].request_time_ms",
+              "name": "Last Executed",
+              "type": "time"
+            },
+            {
+              "jsonPath": "$.results[*].users",
+              "name": "User",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].elapsed_time_ms",
+              "name": "Elapsed Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].queue_time_us",
+              "name": "Queue Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].result_size",
+              "name": "Size",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].result_count",
+              "name": "Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].query_selectivity_percent",
+              "name": "Selectivity",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].scan_results",
+              "name": "Scan Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].fetches",
+              "name": "Fetches",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].total",
+              "name": "Total",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].statement",
+              "name": "Statement",
+              "type": "string"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "params": [],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID,IFMISSING(preparedText, statement) AS statement,        users, last_request_time_ms AS request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        result_count,        result_size,        query_selectivity_percent,        scan_results,        fetches,     IFMISSINGORNULL(cost,-1) AS   cost,        total FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END  AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END  AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END GROUP BY IFMISSINGORNULL(clientContextID, 'unknown'),IFMISSING(preparedText, statement), users LETTING last_request_time_ms = MAX(request_time_ms),      service_time_ms = ROUND(AVG(STR_TO_DURATION(serviceTime) / 1e6), 2),     elapsed_time_ms = ROUND(AVG(STR_TO_DURATION(elapsedTime) / 1e6), 2),     queue_time_us = ROUND(AVG((STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3), 3),     query_selectivity_percent = ROUND(AVG(IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0)), 4),     scan_results = ROUND(AVG(IFMISSING(phaseCounts.`indexScan`, 0)), 2),     fetches = ROUND(AVG(IFMISSING(phaseCounts.`fetch`, 0)), 2),     cost = ROUND(AVG(ARRAY_SUM(OBJECT_VALUES(phaseCounts))), 2),     result_count = ROUND(AVG(resultCount), 2),     result_size = ROUND(AVG(resultSize), 2),     total = COUNT(1) ORDER BY total DESC, last_request_time_ms DESC LIMIT $stop\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Top ${limit} Most Common Slow Queries",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Client Context ID": 0,
+              "Elapsed Time": 5,
+              "Fetches": 11,
+              "Last Executed": 3,
+              "Queue Time": 6,
+              "Results": 8,
+              "Scan Results": 10,
+              "Selectivity": 9,
+              "Size": 7,
+              "Span": 2,
+              "Statement": 13,
+              "Total": 12,
+              "Trace-ID": 1,
+              "User": 4
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 44
+      },
+      "id": 25,
+      "panels": [],
+      "title": "Low Selectivity Queries",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "Selectivity is a measure of query performance and is calculated as # of Results / # of Index Scan Results.  This should be as close to 100% as possible",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Request Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 142
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elapsed Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 101
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Size"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "unit",
+                "value": "decbytes"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Selectivity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 91
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scan Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Fetches"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Statement"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Queue Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              },
+              {
+                "id": "custom.width",
+                "value": 93
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Cost"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 65
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "User"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Span"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": "span:(.*),.*",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trace-ID"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": ".*,trace-id:(.*)",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 45
+      },
+      "id": 16,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Selectivity"
+          }
+        ]
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID,IFMISSING(preparedText, statement) AS statement,    users, phaseTimes,   request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        resultCount,        resultSize,        query_selectivity_percent,        scan_results AS scanResults,        fetches,        IFMISSINGORNULL(cost,-1) AS cost FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),     service_time_ms = ROUND(STR_TO_DURATION(serviceTime) / 1e6),     elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6),     queue_time_us = ROUND( (STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3 , 3),     query_selectivity_percent = ROUND(IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0), 4),     scan_results = IFMISSING(phaseCounts.`indexScan`, 0),     fetches = IFMISSING(phaseCounts.`fetch`, 0),     cost = ARRAY_SUM(OBJECT_VALUES(phaseCounts)) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END     AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END ORDER BY query_selectivity_percent ASC, request_time_ms DESC LIMIT $stop\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 10,
+          "columns": [],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "name": "Client Context ID",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Span"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Trace-ID"
+            },
+            {
+              "jsonPath": "$.results[*].request_time_ms",
+              "name": "Request Time",
+              "type": "time"
+            },
+            {
+              "jsonPath": "$.results[*].users",
+              "name": "User",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].phaseTimes",
+              "language": "jsonpath",
+              "name": "Phase Times"
+            },
+            {
+              "jsonPath": "$.results[*].elapsed_time_ms",
+              "name": "Elapsed Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].queue_time_us",
+              "name": "Queue Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].resultSize",
+              "name": "Size",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].resultCount",
+              "name": "Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].query_selectivity_percent",
+              "name": "Selectivity",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].scanResults",
+              "name": "Scan Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].fetches",
+              "name": "Fetches",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].cost",
+              "name": "Cost",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].statement",
+              "name": "Statement",
+              "type": "string"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "params": [],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID,IFMISSING(preparedText, statement) AS statement,    users, phaseTimes,   request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        resultCount,        resultSize,        query_selectivity_percent,        scan_results AS scanResults,        fetches,        IFMISSINGORNULL(cost,-1) AS cost FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),     service_time_ms = ROUND(STR_TO_DURATION(serviceTime) / 1e6),     elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6),     queue_time_us = ROUND( (STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3 , 3),     query_selectivity_percent = ROUND(IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0), 4),     scan_results = IFMISSING(phaseCounts.`indexScan`, 0),     fetches = IFMISSING(phaseCounts.`fetch`, 0),     cost = ARRAY_SUM(OBJECT_VALUES(phaseCounts)) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END     AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END ORDER BY query_selectivity_percent ASC, request_time_ms DESC LIMIT $stop\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Top ${limit} Lowest Selectivity Queries",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Client Context ID": 0,
+              "Cost": 13,
+              "Elapsed Time": 6,
+              "Fetches": 12,
+              "Phase Times": 5,
+              "Queue Time": 7,
+              "Request Time": 3,
+              "Results": 9,
+              "Scan Results": 11,
+              "Selectivity": 10,
+              "Size": 8,
+              "Span": 2,
+              "Statement": 14,
+              "Trace-ID": 1,
+              "User": 4
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 56
+      },
+      "id": 23,
+      "panels": [],
+      "title": "Longest Running Queries",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Request Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 142
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elapsed Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 118
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Size"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "unit",
+                "value": "decbytes"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Selectivity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 80
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scan Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Fetches"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Statement"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Queue Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              },
+              {
+                "id": "custom.width",
+                "value": 93
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Cost"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 65
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "User"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Span"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": "span:(.*),.*",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trace-ID"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": ".*,trace-id:(.*)",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "statement"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 178
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 57
+      },
+      "id": 15,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID,IFMISSING(preparedText, statement) AS statement,  users, phaseTimes,      request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        resultCount,        resultSize,        query_selectivity_percent,        scan_results AS scanResults,        fetches,      IFMISSINGORNULL(cost,-1) AS  cost FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),     service_time_ms = ROUND(STR_TO_DURATION(serviceTime) / 1e6),     elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6),     queue_time_us = ROUND( (STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3 , 3),     query_selectivity_percent = ROUND(IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0), 4),     scan_results = IFMISSING(phaseCounts.`indexScan`, 0),     fetches = IFMISSING(phaseCounts.`fetch`, 0),     cost = ARRAY_SUM(OBJECT_VALUES(phaseCounts)) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END    AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END ORDER BY elapsed_time_ms DESC LIMIT $stop\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 10,
+          "columns": [],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "name": "Client Context ID",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Span"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Trace-ID"
+            },
+            {
+              "jsonPath": "$.results[*].request_time_ms",
+              "name": "Request Time",
+              "type": "time"
+            },
+            {
+              "jsonPath": "$.results[*].users",
+              "name": "User",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].phaseTimes",
+              "language": "jsonpath",
+              "name": "Phase Times"
+            },
+            {
+              "jsonPath": "$.results[*].elapsed_time_ms",
+              "name": "Elapsed Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].queue_time_us",
+              "name": "Queue Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].resultSize",
+              "name": "Size",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].resultCount",
+              "name": "Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].query_selectivity_percent",
+              "name": "Selectivity",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].scanResults",
+              "name": "Scan Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].fetches",
+              "name": "Fetches",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].cost",
+              "name": "Cost",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].statement",
+              "name": "Statement",
+              "type": "string"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "params": [],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID,IFMISSING(preparedText, statement) AS statement,  users, phaseTimes,      request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        resultCount,        resultSize,        query_selectivity_percent,        scan_results AS scanResults,        fetches,      IFMISSINGORNULL(cost,-1) AS  cost FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),     service_time_ms = ROUND(STR_TO_DURATION(serviceTime) / 1e6),     elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6),     queue_time_us = ROUND( (STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3 , 3),     query_selectivity_percent = ROUND(IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0), 4),     scan_results = IFMISSING(phaseCounts.`indexScan`, 0),     fetches = IFMISSING(phaseCounts.`fetch`, 0),     cost = ARRAY_SUM(OBJECT_VALUES(phaseCounts)) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END    AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END ORDER BY elapsed_time_ms DESC LIMIT $stop\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Top ${limit} Longest Running Slow Queries",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Client Context ID": 0,
+              "Cost": 13,
+              "Elapsed Time": 6,
+              "Fetches": 12,
+              "Phase Times": 5,
+              "Queue Time": 7,
+              "Request Time": 3,
+              "Results": 9,
+              "Scan Results": 11,
+              "Selectivity": 10,
+              "Size": 8,
+              "Span": 2,
+              "Statement": 14,
+              "Trace-ID": 1,
+              "User": 4
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 68
+      },
+      "id": 27,
+      "panels": [],
+      "title": "Highest Cost Queries",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Request Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 142
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elapsed Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 101
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Size"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "unit",
+                "value": "decbytes"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Selectivity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 80
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scan Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Fetches"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Statement"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Queue Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              },
+              {
+                "id": "custom.width",
+                "value": 93
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Cost"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 68
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "User"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Span"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": "span:(.*),.*",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trace-ID"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": ".*,trace-id:(.*)",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 69
+      },
+      "id": 17,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Cost"
+          }
+        ]
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID,IFMISSING(preparedText, statement) AS statement,   users,  phaseTimes,   request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        resultCount,        resultSize,        query_selectivity_percent,        scan_results AS scanResults,        fetches,     IFMISSINGORNULL(cost,-1) AS   cost FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),     service_time_ms = ROUND(STR_TO_DURATION(serviceTime) / 1e6),     elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6),     queue_time_us = ROUND( (STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3 , 3),     query_selectivity_percent = ROUND(IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0), 4),     scan_results = IFMISSING(phaseCounts.`indexScan`, 0),     fetches = IFMISSING(phaseCounts.`fetch`, 0),     cost = ARRAY_SUM(OBJECT_VALUES(phaseCounts)) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END    AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END ORDER BY cost DESC, request_time_ms DESC LIMIT $stop\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 10,
+          "columns": [],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "name": "Client Context ID",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Span"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Trace-ID"
+            },
+            {
+              "jsonPath": "$.results[*].request_time_ms",
+              "name": "Request Time",
+              "type": "time"
+            },
+            {
+              "jsonPath": "$.results[*].users",
+              "name": "User",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].phaseTimes",
+              "language": "jsonpath",
+              "name": "Phase Times"
+            },
+            {
+              "jsonPath": "$.results[*].elapsed_time_ms",
+              "name": "Elapsed Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].queue_time_us",
+              "name": "Queue Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].resultSize",
+              "name": "Size",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].resultCount",
+              "name": "Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].query_selectivity_percent",
+              "name": "Selectivity",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].scanResults",
+              "name": "Scan Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].fetches",
+              "name": "Fetches",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].cost",
+              "name": "Cost",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].statement",
+              "name": "Statement",
+              "type": "string"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "params": [],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID,IFMISSING(preparedText, statement) AS statement,   users,  phaseTimes,   request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        resultCount,        resultSize,        query_selectivity_percent,        scan_results AS scanResults,        fetches,     IFMISSINGORNULL(cost,-1) AS   cost FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),     service_time_ms = ROUND(STR_TO_DURATION(serviceTime) / 1e6),     elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6),     queue_time_us = ROUND( (STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3 , 3),     query_selectivity_percent = ROUND(IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0), 4),     scan_results = IFMISSING(phaseCounts.`indexScan`, 0),     fetches = IFMISSING(phaseCounts.`fetch`, 0),     cost = ARRAY_SUM(OBJECT_VALUES(phaseCounts)) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END    AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END ORDER BY cost DESC, request_time_ms DESC LIMIT $stop\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Top ${limit} Highest Cost Queries",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Client Context ID": 0,
+              "Cost": 13,
+              "Elapsed Time": 6,
+              "Fetches": 12,
+              "Phase Times": 5,
+              "Queue Time": 7,
+              "Request Time": 3,
+              "Results": 9,
+              "Scan Results": 11,
+              "Selectivity": 10,
+              "Size": 8,
+              "Span": 2,
+              "Statement": 14,
+              "Trace-ID": 1,
+              "User": 4
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 80
+      },
+      "id": 32,
+      "panels": [],
+      "title": "Primary Index Queries",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Request Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 142
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elapsed Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 101
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Size"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "unit",
+                "value": "decbytes"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Selectivity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 80
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scan Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Fetches"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Statement"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Queue Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              },
+              {
+                "id": "custom.width",
+                "value": 93
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Cost"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 65
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "User"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Span"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": "span:(.*),.*",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trace-ID"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": ".*,trace-id:(.*)",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 81
+      },
+      "id": 30,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Request Time"
+          }
+        ]
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID,IFMISSING(preparedText, statement) AS statement,   users, phaseTimes,   request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        resultCount,        resultSize,        query_selectivity_percent,        scan_results AS scanResults,        fetches,      IFMISSINGORNULL(cost,-1) AS  cost FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),     service_time_ms = ROUND(STR_TO_DURATION(serviceTime) / 1e6),     elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6),     queue_time_us = ROUND( (STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3 , 3),     query_selectivity_percent = ROUND(IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0), 4),     scan_results = IFMISSING(phaseCounts.`indexScan`, 0),     fetches = IFMISSING(phaseCounts.`fetch`, 0),     cost = ARRAY_SUM(OBJECT_VALUES(phaseCounts)) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END    AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND phaseCounts.primaryScan IS NOT MISSING ORDER BY request_time_ms DESC LIMIT $stop\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 300,
+          "columns": [],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "name": "Client Context ID",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Span"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Trace-ID"
+            },
+            {
+              "jsonPath": "$.results[*].request_time_ms",
+              "name": "Request Time",
+              "type": "time"
+            },
+            {
+              "jsonPath": "$.results[*].users",
+              "name": "User",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].phaseTimes",
+              "language": "jsonpath",
+              "name": "Phase Times"
+            },
+            {
+              "jsonPath": "$.results[*].elapsed_time_ms",
+              "name": "Elapsed Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].queue_time_us",
+              "name": "Queue Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].resultSize",
+              "name": "Size",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].resultCount",
+              "name": "Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].query_selectivity_percent",
+              "name": "Selectivity",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].scanResults",
+              "name": "Scan Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].fetches",
+              "name": "Fetches",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].cost",
+              "name": "Cost",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].statement",
+              "name": "Statement",
+              "type": "string"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "params": [],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID,IFMISSING(preparedText, statement) AS statement,   users, phaseTimes,   request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        resultCount,        resultSize,        query_selectivity_percent,        scan_results AS scanResults,        fetches,      IFMISSINGORNULL(cost,-1) AS  cost FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),     service_time_ms = ROUND(STR_TO_DURATION(serviceTime) / 1e6),     elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6),     queue_time_us = ROUND( (STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3 , 3),     query_selectivity_percent = ROUND(IFNULL( resultCount / IFMISSING(phaseCounts.`indexScan`, 0), 0), 4),     scan_results = IFMISSING(phaseCounts.`indexScan`, 0),     fetches = IFMISSING(phaseCounts.`fetch`, 0),     cost = ARRAY_SUM(OBJECT_VALUES(phaseCounts)) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END    AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END AND phaseCounts.primaryScan IS NOT MISSING ORDER BY request_time_ms DESC LIMIT $stop\",\n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Top ${limit} Primary Index Queries",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Client Context ID": 0,
+              "Cost": 13,
+              "Elapsed Time": 6,
+              "Fetches": 12,
+              "Phase Times": 5,
+              "Queue Time": 7,
+              "Request Time": 3,
+              "Results": 9,
+              "Scan Results": 11,
+              "Selectivity": 10,
+              "Size": 8,
+              "Span": 2,
+              "Statement": 14,
+              "Trace-ID": 1,
+              "User": 4
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 92
+      },
+      "id": 29,
+      "panels": [],
+      "title": "Queries with Errors",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Request Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 142
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Elapsed Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 101
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Fetches"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Statement"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Queue Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              },
+              {
+                "id": "custom.width",
+                "value": 93
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Cost"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 65
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Error"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 350
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scan Results"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "User"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Span"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": "span:(.*),.*",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trace-ID"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "pattern": ".*,trace-id:(.*)",
+                      "result": {
+                        "index": 0,
+                        "text": "$1"
+                      }
+                    },
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 93
+      },
+      "id": 14,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Request Time"
+          }
+        ]
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "body": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID,IFMISSING(preparedText, statement) AS statement,   users,  IFMISSINGORNULL(phaseTimes,'error') as phaseTimes,   request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        scan_results AS scanResults,        fetches,     IFMISSINGORNULL(cost,-1) AS  cost,        (ARRAY TOSTRING(v.code) || ' - ' || v.message FOR v IN errors END)[0] AS `error` FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),     service_time_ms = ROUND(STR_TO_DURATION(serviceTime) / 1e6),     elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6),     queue_time_us = ROUND( (STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3 , 3),     scan_results = IFMISSING(phaseCounts.`indexScan`, 0),     fetches = IFMISSING(phaseCounts.`fetch`, 0),     cost = ARRAY_SUM(OBJECT_VALUES(phaseCounts)) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END    AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%'  AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END   AND errorCount > 0 ORDER BY request_time_ms DESC LIMIT $stop\",    \n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+          "cacheDurationSeconds": 10,
+          "columns": [],
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "name": "Client Context ID",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Span"
+            },
+            {
+              "jsonPath": "$.results[*].clientContextID",
+              "language": "jsonpath",
+              "name": "Trace-ID"
+            },
+            {
+              "jsonPath": "$.results[*].request_time_ms",
+              "name": "Request Time",
+              "type": "time"
+            },
+            {
+              "jsonPath": "$.results[*].users",
+              "name": "User",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].phaseTimes",
+              "language": "jsonpath",
+              "name": "Phase Times"
+            },
+            {
+              "jsonPath": "$.results[*].elapsed_time_ms",
+              "name": "Elapsed Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].queue_time_us",
+              "name": "Queue Time",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].scanResults",
+              "name": "Scan Results",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].fetches",
+              "name": "Fetches",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].cost",
+              "name": "Cost",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.results[*].error",
+              "name": "Error",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.results[*].statement",
+              "name": "Statement",
+              "type": "string"
+            }
+          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "params": [],
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url_options": {
+            "body_content_type": "application/json",
+            "body_type": "raw",
+            "data": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID,IFMISSING(preparedText, statement) AS statement,   users,  IFMISSINGORNULL(phaseTimes,'error') as phaseTimes,   request_time_ms,        elapsed_time_ms,        service_time_ms,        queue_time_us,        scan_results AS scanResults,        fetches,     IFMISSINGORNULL(cost,-1) AS  cost,        (ARRAY TOSTRING(v.code) || ' - ' || v.message FOR v IN errors END)[0] AS `error` FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))),     service_time_ms = ROUND(STR_TO_DURATION(serviceTime) / 1e6),     elapsed_time_ms = ROUND(STR_TO_DURATION(elapsedTime) / 1e6),     queue_time_us = ROUND( (STR_TO_DURATION(elapsedTime) - STR_TO_DURATION(serviceTime)) / 1e3 , 3),     scan_results = IFMISSING(phaseCounts.`indexScan`, 0),     fetches = IFMISSING(phaseCounts.`fetch`, 0),     cost = ARRAY_SUM(OBJECT_VALUES(phaseCounts)) WHERE CASE WHEN ($span != '*' AND $span != '' AND POS($span,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[0],'span:','') = $span ELSE clientContextID != '' END AND CASE WHEN ($traceid != '*' AND $traceid != '' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END    AND (request_time_ms / 1000) >= $from     AND (request_time_ms / 1000) <= $to     AND IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'     AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%'  AND CASE WHEN $rbacuser != '*' THEN users = $rbacuser ELSE users > '' END   AND errorCount > 0 ORDER BY request_time_ms DESC LIMIT $stop\",    \n    \"$span\": \"${Span}\",\n    \"$traceid\" : \"${Traceid}\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+            "headers": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          }
+        }
+      ],
+      "title": "Top ${limit} Queries with Errors",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Client Context ID": 0,
+              "Cost": 10,
+              "Elapsed Time": 6,
+              "Error": 11,
+              "Fetches": 9,
+              "Phase Times": 5,
+              "Queue Time": 7,
+              "Request Time": 3,
+              "Scan Results": 8,
+              "Span": 2,
+              "Statement": 12,
+              "Trace-ID": 1,
+              "User": 4
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "preload": false,
+  "refresh": "5m",
+  "schemaVersion": 40,
+  "tags": [
+    "Couchbase",
+    "N1QL",
+    "Slow Query",
+    "Query Service",
+    "Query"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "Infinity",
+          "value": "Infinity"
+        },
+        "includeAll": false,
+        "label": "Datasource",
+        "name": "datasource",
+        "options": [],
+        "query": "yesoreyeram-infinity-datasource",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
+      {
+        "allValue": "*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "",
+        "includeAll": true,
+        "label": "User",
+        "name": "users",
+        "options": [],
+        "query": {
+          "infinityQuery": {
+            "columns": [],
+            "filters": [],
+            "format": "table",
+            "parser": "backend",
+            "refId": "",
+            "root_selector": "results",
+            "source": "url",
+            "type": "json",
+            
+            "url_options": {
+              "body_content_type": "application/json",
+              "body_type": "raw",
+              "data": "{\n    \"statement\": \"SELECT users FROM system:completed_requests WHERE IFMISSINGORNULL(clientContextID, '') NOT LIKE 'INTERNAL-%'   AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'INFER %'   AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ADVISE %'   AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'CREATE INDEX%'   AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE 'ALTER INDEX%'   AND UPPER(IFMISSING(preparedText, statement)) NOT LIKE '% SYSTEM:%' GROUP BY users ORDER BY LOWER(users) ASC\",    \n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+              "headers": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST",
+              "params": []
+            }
+          },
+          "query": "",
+          "queryType": "infinity"
+        },
+        "refresh": 1,
+        "regex": ".*",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "25",
+          "value": "25"
+        },
+        "includeAll": false,
+        "label": "Limit",
+        "name": "limit",
+        "options": [
+          {
+            "selected": false,
+            "text": "10",
+            "value": "10"
+          },
+          {
+            "selected": true,
+            "text": "25",
+            "value": "25"
+          },
+          {
+            "selected": false,
+            "text": "50",
+            "value": "50"
+          },
+          {
+            "selected": false,
+            "text": "100",
+            "value": "100"
+          },
+          {
+            "selected": false,
+            "text": "250",
+            "value": "250"
+          },
+          {
+            "selected": false,
+            "text": "500",
+            "value": "500"
+          },
+          {
+            "selected": false,
+            "text": "1000",
+            "value": "1000"
+          },
+          {
+            "selected": false,
+            "text": "4000",
+            "value": "4000"
+          }
+        ],
+        "query": "10,25,50,100,250,500,1000,4000",
+        "type": "custom"
+      },
+      {
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "",
+        "description": "traceid from clientContextID",
+        "includeAll": true,
+        "label": "traceid",
+        "name": "Traceid",
+        "options": [],
+        "query": {
+          "infinityQuery": {
+            "columns": [],
+            "filters": [],
+            "format": "table",
+            "parser": "backend",
+            "refId": "",
+            "root_selector": "results",
+            "source": "url",
+            "type": "json",
+            
+            "url_options": {
+              "body_content_type": "application/json",
+              "body_type": "raw",
+              "data": "{\n    \"statement\": \"SELECT DISTINCT IFMISSINGORNULL(clientContextID, 'unknown') AS clientContextID FROM system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))) WHERE (request_time_ms / 1000) >= $from AND (request_time_ms / 1000) <= $to AND clientContextID != '' LIMIT $stop\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+              "headers": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST"
+            }
+          },
+          "query": "",
+          "queryType": "infinity"
+        },
+        "refresh": 2,
+        "regex": "/trace-id:(?<value>[^,]+)/g",
+        "sort": 5,
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "yesoreyeram-infinity-datasource",
+          "uid": "${datasource}"
+        },
+        "definition": "",
+        "description": "Span from clientContextID, based on trace-id",
+        "includeAll": true,
+        "label": "Span",
+        "name": "Span",
+        "options": [],
+        "query": {
+          "infinityQuery": {
+            "columns": [],
+            "filters": [],
+            "format": "table",
+            "parser": "backend",
+            "refId": "",
+            "root_selector": "results",
+            "source": "url",
+            "type": "json",
+            
+            "url_options": {
+              "body_content_type": "application/json",
+              "body_type": "raw",
+              "data": "{\n    \"statement\": \"SELECT IFMISSINGORNULL(clientContextID, 'unknown') as clientContextID from system:completed_requests LET request_time_ms = STR_TO_MILLIS(STR_TO_UTC(REPLACE(REPLACE(REGEX_REPLACE(REPLACE(REPLACE(REGEX_REPLACE(requestTime, ' [A-Z]{3}$', ''), ' -', '-'), ' +', '+'), '00$', ':00'), ' ', 'T'), '::', ':'))) WHERE (request_time_ms / 1000) >= $from AND (request_time_ms / 1000) <= $to AND CASE WHEN ($traceid != '*' AND POS($traceid,'{') = -1) THEN REPLACE(SPLIT(clientContextID,',')[1],'trace-id:','') = $traceid ELSE clientContextID != '' END limit $stop\",\n    \"$from\": 0,\n    \"$to\": \"${__timeTo}\",\n    \"$traceid\": \"${Traceid}\",\n    \"$stop\": ${limit},\n    \"$rbacuser\": \"${users}\",\n    \"readonly\": true,\n    \"client_context_id\": \"grafana\"\n}",
+              "headers": [
+                {
+                  "key": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST"
+            }
+          },
+          "query": "",
+          "queryType": "infinity"
+        },
+        "refresh": 2,
+        "regex": "/span:(?<value>[^,]+)/g",
+        "sort": 5,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "15s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "Couchbase Slow Queries",
+  "uid": "f48ec0a4-6bdc-45e0-b62e-a20c6e634407",
+  "version": 4,
+  "weekStart": ""
+}

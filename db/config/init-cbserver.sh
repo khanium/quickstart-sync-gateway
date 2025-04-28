@@ -24,6 +24,7 @@ if ! [ -f "$FILE" ]; then
 
   sleep 10s 
   /opt/couchbase/bin/couchbase-cli cluster-init -c $CB_HOST \
+  --cluster-name $CLUSTER_NAME \
   --cluster-username $CB_USER \
   --cluster-password $CB_PASS \
   --services $CB_SERVICES_CONFIG \

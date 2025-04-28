@@ -13,11 +13,16 @@ scrape_configs:
     basic_auth:
       username: "metrics_user"
       password: "password"
-    static_configs:
-      - targets: [ "couchbase:8091"]
-        labels:
-           cluster_name: "demo7"
-           node: "node1"
+    scheme: "https"
+    tls_config:
+      insecure_skip_verify: true
+    http_sd_configs:
+      # https://docs.couchbase.com/server/current/rest-api/rest-discovery-api.html
+      - url: "http://couchbase:8091/prometheus_sd_config?clusterLabels=uuidAndName"
+        refresh_interval: 30s
+        basic_auth:
+          username: "Administrator"
+          password: "password"
 
   - job_name: 'sgw_metrics'
     metrics_path: /_metrics
