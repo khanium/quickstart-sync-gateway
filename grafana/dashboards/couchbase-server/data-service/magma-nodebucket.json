@@ -1,0 +1,3591 @@
+{
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 62,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "promtimer"
+      ],
+      "targetBlank": false,
+      "title": "Other Dashboards (same time range)",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 31,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(kv_ep_magma_gets{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "gets",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "rate(kv_ep_magma_sets{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "sets",
+          "refId": "E"
+        },
+        {
+          "exemplar": true,
+          "expr": "rate(kv_ep_magma_inserts{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "inserts",
+          "refId": "B"
+        }
+      ],
+      "title": "OPS rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_write_cache_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "write cache",
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_bloom_filter_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "filter",
+          "range": true,
+          "refId": "H"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_block_cache_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "block cache",
+          "range": true,
+          "refId": "G"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_table_meta_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "table meta",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_table_object_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "table object",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_buffer_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "buffer",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_wal_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "wal",
+          "range": true,
+          "refId": "E"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_total_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "total",
+          "range": true,
+          "refId": "F"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_histogram_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "histogram",
+          "range": true,
+          "refId": "K"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_lsmtree_object_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "lsmtree object",
+          "range": true,
+          "refId": "I"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_tree_snapshot_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "tree snapshot",
+          "range": true,
+          "refId": "J"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_domain_memory_used_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",domain=\"secondary\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "secondary domain",
+          "range": true,
+          "refId": "L"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_domain_memory_used_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",domain=\"primary\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "primary domain",
+          "range": true,
+          "refId": "M"
+        }
+      ],
+      "title": "Memory",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum by (thread_pool, instance) (rate(kv_thread_cpu_usage_seconds{cluster_name=~\"$cluster\",instance=~\"$node\"}[6m]))",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{label_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Thread pool CPU",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_compactions{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "compactions",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_magma_compactions{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"keyindex\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "key",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_magma_compactions{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "seq",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_ttl_compactions{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "ttl",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_filecount_compactions{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "filecount",
+          "range": true,
+          "refId": "E"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_keyindex_filecount_compactions{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "key filecount",
+          "range": true,
+          "refId": "F"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_seqindex_filecount_compactions{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "seq filecount",
+          "range": true,
+          "refId": "G"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_writer_compactions{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "writer",
+          "range": true,
+          "refId": "H"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_keyindex_writer_compactions{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "key writer",
+          "range": true,
+          "refId": "I"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_seqindex_writer_compactions{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "seq writer",
+          "range": true,
+          "refId": "J"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_seqindex_data_compactions{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "seq data level",
+          "range": true,
+          "refId": "K"
+        }
+      ],
+      "title": "Compaction rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_flushes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "flushes",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Flush rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_tables{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "legendFormat": "tables",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_tables_created{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "creation rate",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_tables_deleted{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "deletion rate",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Tables",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 27
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "rate(kv_ep_magma_block_cache_hits{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "hit rate",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "rate(kv_ep_magma_block_cache_misses{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "miss rate",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_index_resident_ratio_ratio{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"} * 100",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "index resident %",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Block cache",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "total",
+            "binary": {
+              "left": "hit rate",
+              "reducer": "sum",
+              "right": "miss rate"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "hit ratio",
+            "binary": {
+              "left": "hit rate",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "total"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "hit%",
+            "binary": {
+              "left": "hit ratio",
+              "operator": "*",
+              "reducer": "sum",
+              "right": "100"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 36
+      },
+      "id": 7,
+      "panels": [],
+      "title": "Disk IO",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 37
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "rate(kv_ep_magma_write_bytes_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "interval": "",
+          "legendFormat": "total",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_write_bytes_compact_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "compactions",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "rate(kv_magma_write_bytes_{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"keyindex\",instance=~\"$node\"}[1m])",
+          "interval": "",
+          "legendFormat": "keyindex",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_magma_write_bytes_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "seqindex",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_seqindex_delta_write_bytes_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "seqindex delta levels",
+          "range": true,
+          "refId": "E"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_magma_write_bytes_filecount_compact_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"keyindex\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "keyindex filecount",
+          "range": true,
+          "refId": "F"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_magma_write_bytes_filecount_compact_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "seqindex filecount",
+          "range": true,
+          "refId": "G"
+        }
+      ],
+      "title": "Write bytes rate",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "seqindex data level",
+            "binary": {
+              "left": "seqindex",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "seqindex delta levels"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 37
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_write_bytes_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "interval": "",
+          "legendFormat": "total",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_write_bytes_compact_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "compactions",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_magma_write_bytes_{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"keyindex\",instance=~\"$node\"}",
+          "interval": "",
+          "legendFormat": "keyindex",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_magma_write_bytes_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "seqindex",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_seqindex_delta_write_bytes_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "seqindex delta levels",
+          "range": true,
+          "refId": "E"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_magma_write_bytes_filecount_compact_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"keyindex\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "keyindex filecount",
+          "range": true,
+          "refId": "F"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_magma_write_bytes_filecount_compact_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "seqindex filecount",
+          "range": true,
+          "refId": "G"
+        }
+      ],
+      "title": "Write bytes",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "seqindex data level",
+            "binary": {
+              "left": "seqindex",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "seqindex delta levels"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binBps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 46
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "rate(kv_ep_magma_bytes_incoming_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "interval": "",
+          "legendFormat": "total",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "rate(kv_magma_bytes_incoming_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"keyindex\",instance=~\"$node\"}[1m])",
+          "interval": "",
+          "legendFormat": "keyindex",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "rate(kv_magma_bytes_incoming_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}[1m])",
+          "interval": "",
+          "legendFormat": "seqindex",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "rate(kv_ep_magma_seqindex_delta_bytes_incoming_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "interval": "",
+          "legendFormat": "seqindex delta levels",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Bytes incoming rate",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "seqindex data level",
+            "binary": {
+              "left": "seqindex",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "seqindex delta levels"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 46
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_bytes_incoming_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "interval": "",
+          "legendFormat": "total",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_magma_bytes_incoming_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"keyindex\",instance=~\"$node\"}",
+          "interval": "",
+          "legendFormat": "keyindex",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_magma_bytes_incoming_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}",
+          "interval": "",
+          "legendFormat": "seqindex",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_seqindex_delta_bytes_incoming_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "interval": "",
+          "legendFormat": "seqindex delta levels",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Bytes incoming",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "seqindex data level",
+            "binary": {
+              "left": "seqindex",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "seqindex delta levels"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binBps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 55
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_read_bytes_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "total",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_read_bytes_compact_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "compactions",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_read_bytes_get_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[1m])",
+          "hide": false,
+          "legendFormat": "gets",
+          "range": true,
+          "refId": "E"
+        }
+      ],
+      "title": "Read bytes rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 55
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_read_bytes_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "total",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_read_bytes_compact_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "compactions",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_read_bytes_get_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "gets",
+          "range": true,
+          "refId": "E"
+        }
+      ],
+      "title": "Read bytes",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binBps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 64
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_bytes_outgoing_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[2m])",
+          "hide": false,
+          "legendFormat": "outgoing",
+          "range": true,
+          "refId": "F"
+        }
+      ],
+      "title": "Bytes outgoing rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 64
+      },
+      "id": 15,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_bytes_outgoing_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "outgoing",
+          "range": true,
+          "refId": "F"
+        }
+      ],
+      "title": "Bytes outgoing",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 73
+      },
+      "id": 16,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_readio{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[20s])",
+          "hide": false,
+          "legendFormat": "readio",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Read IO rate",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 82
+      },
+      "id": 17,
+      "panels": [],
+      "title": "Size",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 83
+      },
+      "id": 18,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_total_disk_usage_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "interval": "",
+          "legendFormat": "total",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_wal_disk_usage_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "interval": "",
+          "legendFormat": "wal",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_checkpoint_disk_usage_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "checkpoint",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_active_disk_usage_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "active",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "editorMode": "code",
+          "expr": "couch_docs_actual_disk_size{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "couch_docs_actual",
+          "range": true,
+          "refId": "E"
+        }
+      ],
+      "title": "Disk usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 83
+      },
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_logical_data_size_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "data",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_logical_disk_size_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "disk",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_history_logical_data_size_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "history data",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_history_logical_disk_size_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "history disk",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Logical size",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 92
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_data_blocks_uncompressed_size{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "uncompressed",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_data_blocks_compressed_size{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "hide": false,
+          "legendFormat": "compressed",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_magma_data_blocks_space_reduction_estimate_pct_ratio{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"} * 100",
+          "hide": false,
+          "legendFormat": "space reduction %",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Data block compression",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 92
+      },
+      "id": 21,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "kv_ep_magma_fragmentation_ratio{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"} * 100",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "fragmentation%",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Fragmentation %",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 101
+      },
+      "id": 22,
+      "panels": [],
+      "title": "History",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 102
+      },
+      "id": 24,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "kv_ep_db_history_start_timestamp_seconds{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}",
+          "legendFormat": "timestamp",
+          "refId": "A"
+        }
+      ],
+      "title": "History start timestamp",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binBps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 102
+      },
+      "id": 23,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_history_size_evicted_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[20s])",
+          "hide": false,
+          "legendFormat": "size",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_history_time_evicted_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[20s])",
+          "hide": false,
+          "legendFormat": "time",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "History eviction bytes rate",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 111
+      },
+      "id": 25,
+      "panels": [],
+      "title": "WriteAmp",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 112
+      },
+      "id": 26,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "avg by (job, instance) (rate(kv_ep_magma_write_bytes_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[15m])) / avg by (job, instance) (rate(kv_ep_magma_bytes_incoming_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[15m]))",
+          "hide": false,
+          "legendFormat": "overall",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "avg by (job, instance) (rate(kv_magma_write_bytes_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"keyindex\",instance=~\"$node\"}[15m])) / avg by (job, instance) (rate(kv_ep_magma_bytes_incoming_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[15m]))",
+          "hide": false,
+          "legendFormat": "keyindex",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "expr": "avg by (job, instance) (rate(kv_magma_write_bytes_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}[15m])) / avg by (job, instance) (rate(kv_ep_magma_bytes_incoming_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[15m]))",
+          "hide": false,
+          "legendFormat": "seqindex",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "expr": "avg by (job, instance) (rate(kv_ep_magma_seqindex_delta_write_bytes_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[15m])) / avg by (job, instance) (rate(kv_ep_magma_bytes_incoming_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[15m]))",
+          "hide": false,
+          "legendFormat": "seqindex delta",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "editorMode": "code",
+          "expr": "(avg by (job, instance) (rate(kv_magma_write_bytes_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}[15m])) - avg by (job, instance) (rate(kv_ep_magma_seqindex_delta_write_bytes_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[15m]))) / avg by (job, instance) (rate(kv_ep_magma_bytes_incoming_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[15m]))",
+          "hide": false,
+          "legendFormat": "seqindex data",
+          "range": true,
+          "refId": "E"
+        }
+      ],
+      "title": "Overall write amp breakdown",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binBps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 112
+      },
+      "id": 27,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_magma_write_bytes_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"keyindex\",instance=~\"$node\"}[15m])",
+          "hide": false,
+          "legendFormat": "write bytes",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_magma_bytes_incoming_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"keyindex\",instance=~\"$node\"}[15m])",
+          "hide": false,
+          "legendFormat": "bytes incoming",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Key index write amp",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "write amp",
+            "binary": {
+              "left": "write bytes",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "bytes incoming"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binBps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 121
+      },
+      "id": 28,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_magma_write_bytes_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}[15m])",
+          "hide": false,
+          "legendFormat": "write bytes",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_magma_bytes_incoming_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}[15m])",
+          "hide": false,
+          "legendFormat": "bytes incoming",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Seq index write amp",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "write amp",
+            "binary": {
+              "left": "write bytes",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "bytes incoming"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binBps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 121
+      },
+      "id": 29,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_seqindex_delta_write_bytes_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[15m])",
+          "hide": false,
+          "legendFormat": "delta write bytes",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_seqindex_delta_bytes_incoming_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[15m])",
+          "hide": false,
+          "legendFormat": "delta bytes incoming",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_magma_write_bytes_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}[15m])",
+          "hide": false,
+          "legendFormat": "write bytes",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_magma_bytes_incoming_bytes{bucket=\"$bucket\",cluster_name=~\"$cluster\",for=\"seqindex\",instance=~\"$node\"}[15m])",
+          "hide": false,
+          "legendFormat": "bytes incoming",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Seq index data level write amp",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "data write bytes",
+            "binary": {
+              "left": "write bytes",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "delta write bytes"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "data bytes incoming",
+            "binary": {
+              "left": "bytes incoming",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "delta bytes incoming"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "write amp",
+            "binary": {
+              "left": "data write bytes",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "data bytes incoming"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binBps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 130
+      },
+      "id": 30,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_seqindex_delta_write_bytes_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[15m])",
+          "hide": false,
+          "legendFormat": "write bytes",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "rate(kv_ep_magma_seqindex_delta_bytes_incoming_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[15m])",
+          "hide": false,
+          "legendFormat": "bytes incoming",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Seq index delta levels write amp",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "write amp",
+            "binary": {
+              "left": "write bytes",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "bytes incoming"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 41,
+  "tags": [
+    "Couchbase",
+    "buckets",
+    "data",
+    "magma"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allValue": "",
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values(kv_auth_cmds, cluster_name)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Cluster",
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "query": "label_values(kv_auth_cmds, cluster_name)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 5,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": "",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values(kv_ep_magma_flushes{cluster_name=~\"$cluster\"}, bucket)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Bucket",
+        "multi": true,
+        "name": "bucket",
+        "options": [],
+        "query": {
+          "query": "label_values(kv_ep_magma_flushes{cluster_name=~\"$cluster\"}, bucket)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 5,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": "",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values(kv_auth_cmds{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}, instance)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Node",
+        "multi": true,
+        "name": "node",
+        "options": [],
+        "query": {
+          "query": "label_values(kv_auth_cmds{cluster_name=~\"$cluster\"}, instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 5,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1d",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "Magma - Node & Bucket",
+  "uid": "magma-node-bucket",
+  "version": 13
+}

@@ -15,12 +15,24 @@ datasources:
     isDefault: true
     url: http://prometheus:9090
     access: proxy
-  # <map> fields that will be converted to json and stored in json_data
+    # <map> fields that will be converted to json and stored in json_data
     jsonData:
-       graphiteVersion: '1.1'
-       tlsSkipVerify: true
-       tlsAuth: false
-       tlsAuthWithCACert: false
+      graphiteVersion: '1.1'
+      tlsSkipVerify: true
+      tlsAuth: false
+      tlsAuthWithCACert: false
+  - name: Query Service
+    type: yesoreyeram-infinity-datasource
+    orgId: 1
+    access: "proxy"
+    url: "http://couchbase:8093/query/service"
+    jsonData:
+      allowedHosts:
+        - "http://couchbase:8093"
+    basicAuth: true
+    basicAuthUser: Administrator
+    secureJsonData:
+      basicAuthPassword: password
 #  - name: Loki
 #    type: loki
 #    access: proxy
