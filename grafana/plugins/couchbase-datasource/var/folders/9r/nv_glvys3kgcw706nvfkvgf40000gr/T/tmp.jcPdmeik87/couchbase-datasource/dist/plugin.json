@@ -1,0 +1,52 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
+  "name": "Couchbase",
+  "id": "couchbase-datasource",
+  "metrics": true,
+  "backend": true,
+  "executable": "gpx_couchbase",
+  "annotations": true,
+  "alerting": true,
+  "info": {
+    "description": "Couchbase database connector",
+    "author": {
+      "name": "Dmitrii Chechetkin",
+      "url": "https://couchbase.com"
+    },
+    "keywords": [
+      "database",
+      "json",
+      "sql++",
+      "n1ql",
+      "couchbase",
+      "highload"
+    ],
+    "logos": {
+      "small": "img/logo.png",
+      "large": "img/logo.png"
+    },
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://github.com/couchbaselabs/grafana-plugin"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/couchbaselabs/grafana-plugin/blob/master/LICENSE"
+      }
+    ],
+    "screenshots": [
+      {
+        "name": "Configuration",
+        "path": "img/screenshot.png"
+      }
+    ],
+    "version": "1.0.0",
+    "updated": "2023-11-30"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=7.0.0",
+    "plugins": []
+  }
+}

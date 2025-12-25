@@ -164,6 +164,7 @@ services:
      - GF_AUTH_ANONYMOUS_ENABLED=true
      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
      - GF_INSTALL_PLUGINS=grafana-simple-json-datasource
+     - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=couchbase-datasource
    ports:
      - '3000:3000'
    depends_on:
@@ -175,6 +176,7 @@ services:
      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
      - ./grafana/dashboards:/var/lib/grafana/dashboards
      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+     - ./grafana/plugins/couchbase-datasource:/var/lib/grafana/plugins/couchbase-datasource
    networks:
      - workshop
 
